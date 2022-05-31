@@ -1,0 +1,5 @@
+server:
+  port: 8090
+kq:
+  swagger:
+    base-package: com.kqinfo.universal.test

@@ -1,0 +1,14 @@
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+server:
+  port: 8081
+kq:
+  image-code:
+    code-count: 5
+    height: 40
+    width: 129
+    line-count: 100
+    code-expire-seconds: 60

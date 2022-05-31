@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.5.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.github.lzj960515</groupId>
+    <artifactId>kq-universal-starter-parent</artifactId>
+    <version>${revision}</version>
+    <inceptionYear>2021-Now</inceptionYear>
+    <packaging>pom</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>统一依赖-parent</description>
+    <url>https://github.com/lzj960515/kq-universal</url>
+
+    <properties>
+        <revision>1.0.0</revision>
+        <kq-universal.version>1.0.0</kq-universal.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <java.version>1.8</java.version>
+        <!-- Spring Projects -->
+        <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+        <spring-cloud-alibaba.verion>2.2.5.RELEASE</spring-cloud-alibaba.verion>
+        <!-- Maven -->
+        <spring-javaformat-maven-plugin.version>0.0.22</spring-javaformat-maven-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <!-- Skywalking -->
+        <skywalking.version>8.4.0</skywalking.version>
+        <!-- Tools -->
+        <mybatis-plus.version>3.4.3.1</mybatis-plus.version>
+        <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
+        <hutool.version>5.7.13</hutool.version>
+        <swagger2.version>2.9.2</swagger2.version>
+        <alipay-sdk.version>4.13.0.ALL</alipay-sdk.version>
+        <xxl-job.version>2.3.0</xxl-job.version>
+        <aliyun-java-sdk-core.version>4.4.6</aliyun-java-sdk-core.version>
+        <aliyun-java-sdk-sms.version>3.0.0-rc1</aliyun-java-sdk-sms.version>
+        <redisson.version>3.14.1</redisson.version>
+        <powermock.version>2.0.2</powermock.version>
+        <poi.version>5.0.0</poi.version>
+        <xerces.version>2.12.0</xerces.version>
+        <tea-openapi.version>0.1.0</tea-openapi.version>
+        <dysmsapi20170525.version>2.0.4</dysmsapi20170525.version>
+        <jjwt.version>0.11.2</jjwt.version>
+        <fastjson.version>1.2.75</fastjson.version>
+        <mockito.version>4.2.0</mockito.version>
+        <easyexcel.version>3.1.0</easyexcel.version>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <scm>
+        <tag>main</tag>
+        <url>https://github.com/lzj960515/kq-universal.git</url>
+        <connection>scm:git:https://github.com/lzj960515/kq-universal.git</connection>
+        <developerConnection>scm:git:git@github.com:lzj960515/kq-universal.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>lzj</id>
+            <name>Zijian Liao</name>
+            <email>liaozijian@cqkqinfo.com</email>
+            <url>https://zijiancode.cn</url>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>kq-universal-redis-starter</module>
+        <module>kq-universal-async-starter</module>
+        <module>kq-universal-stream-starter</module>
+        <module>kq-universal-imagecode-starter</module>
+        <module>kq-universal-common-starter</module>
+        <module>kq-universal-mybatis-plus-starter</module>
+        <module>kq-universal-mybatis-encrypt-starter</module>
+        <module>kq-universal-log-starter</module>
+        <module>kq-universal-retry-starter</module>
+        <module>kq-universal-test-starter</module>
+        <module>kq-universal-delay-task-starter</module>
+        <module>kq-universal-workflow-starter</module>
+        <module>kq-universal-enum-starter</module>
+        <module>kq-universal-comdao-starter</module>
+        <module>kq-universal-ip-starter</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Cloud Alibaba -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.verion}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- MyBatisPlus -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus-generator.version}</version>
+            </dependency>
+
+            <!-- HuTool -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+            <!--Swagger-UI API文档生产工具-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+
+            <!-- Skywalking -->
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-logback-1.x</artifactId>
+                <version>${skywalking.version}</version>
+            </dependency>
+
+            <!-- alipay-sdk -->
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>${alipay-sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-sms</artifactId>
+                <version>${aliyun-java-sdk-sms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun-java-sdk-core.version}</version>
+            </dependency>
+
+            <!-- xxl-job -->
+            <dependency>
+                <groupId>com.xuxueli</groupId>
+                <artifactId>xxl-job-core</artifactId>
+                <version>${xxl-job.version}</version>
+            </dependency>
+
+            <!-- Redisson -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+
+            <!-- Powermock -->
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-module-junit4</artifactId>
+                <version>${powermock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-api-mockito2</artifactId>
+                <version>${powermock.version}</version>
+            </dependency>
+
+            <!-- Excel -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>${xerces.version}</version>
+            </dependency>
+
+            <!-- SMS -->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>tea-openapi</artifactId>
+                <version>${tea-openapi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>dysmsapi20170525</artifactId>
+                <version>${dysmsapi20170525.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-inline</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-async-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-common-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-imagecode-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-redis-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-security-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-stream-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-mybatis-plus-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-mybatis-encrypt-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-log-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-retry-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-test-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-workflow-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-enum-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-comdao-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-ip-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <!-- Source -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.spring.javaformat</groupId>
+                <artifactId>spring-javaformat-maven-plugin</artifactId>
+                <version>${spring-javaformat-maven-plugin.version}</version>
+            </plugin>
+            <!-- Javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <doclint>none</doclint>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- GPG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven-gpg-plugin.version}</version>
+                <configuration>
+                    <useAgent>false</useAgent>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--Nexus Staging Maven插件是将组件部署到OSSRH并将其发布到Central Repository的推荐方法-->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>oss</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten-maven-plugin.version}</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>oss</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>oss</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+</project>

@@ -1,0 +1,5 @@
+kq:
+  swagger:
+    base-package: com.cqkqinfo.universal
+    title: common
+    description: common

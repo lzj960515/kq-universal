@@ -1,0 +1,10 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: delay-task
+  profiles:
+    active: h2
+
+delay-task:
+  task-retention-days: 30

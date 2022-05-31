@@ -1,0 +1,47 @@
+{
+  "name":"测试流程",
+  "desc": "测试流程描述",
+  "callUri": "'/process/test/detail?id='+#businessId",
+  "nodes":[
+    {
+      "type":"start",
+      "name":"start1",
+      "transitions":[
+        {
+          "name":"transition1",
+          "type":"transition",
+          "to":"组长审核"
+        }
+      ]
+    },
+    {
+      "type":"task",
+      "name":"组长审核",
+      "assignee":"",
+      "role": "admin",
+      "sequence": "1",
+      "callUri": "'/process/simple/task?id='+#businessId",
+      "transitions":[
+        {
+          "to":"部门审核"
+        }
+      ]
+    },
+    {
+      "type":"task",
+      "name":"部门审核",
+      "assignee":"",
+      "role": "admin",
+      "sequence": "2",
+      "transitions":[
+        {
+          "to":"end1"
+        }
+      ]
+    },
+    {
+      "type":"end",
+      "name":"end1"
+    }
+  ]
+}

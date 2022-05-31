@@ -1,0 +1,9 @@
+kq:
+  async:
+    core-pool-size: 1
+    max-pool-size: 10
+    queue-capacity: 20
+    allow-core-thread-time-out: false
+    keep-alive-seconds: 60
+    thread-name-prefix: kq-async
+    rejected-execution-handler: java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy

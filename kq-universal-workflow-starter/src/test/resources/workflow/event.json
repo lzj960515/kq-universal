@@ -1,0 +1,50 @@
+{
+  "name":"测试事件",
+  "desc": "测试事件描述",
+  "callUri": "'/process/test/detail?id='+#businessId",
+  "nodes":[
+    {
+      "type":"start",
+      "name":"start1",
+      "event": "startEvent",
+      "transitions":[
+        {
+          "name":"transition1",
+          "type":"transition",
+          "to":"组长审核"
+        }
+      ]
+    },
+    {
+      "type":"task",
+      "name":"组长审核",
+      "assignee":"",
+      "role": "admin",
+      "sequence": "1",
+      "event": "leaderEvent",
+      "transitions":[
+        {
+          "to":"部门审核"
+        }
+      ]
+    },
+    {
+      "type":"task",
+      "name":"部门审核",
+      "assignee":"",
+      "role": "admin",
+      "sequence": "2",
+      "event": "departmentApproveEvent",
+      "transitions":[
+        {
+          "to":"end1"
+        }
+      ]
+    },
+    {
+      "type":"end",
+      "name":"end1",
+      "event": "endEvent"
+    }
+  ]
+}

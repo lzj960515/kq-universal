@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kqinfo.universal.workflow.mapper.TaskMapper">
+
+    <select id="selectTodoTask" resultType="com.kqinfo.universal.workflow.dto.TodoTaskDto">
+        select pi.name process_name, t.name `status`, t.call_uri, t.create_time
+        from tbl_task t join `tbl_process_instance` pi on t.`instance_id` = pi.id
+                        join `tbl_task_operator` top on t.id = top.task_id
+        <where>
+            t.tenant_id = #{tenantId}
+            AND top.`operator_id` = #{userId}
+            <if test="!processIds.isEmpty()">
+                AND t.`process_id` in
+                <foreach collection="processIds" item="processId" open="(" separator="," close=")">
+                    #{processId}
+                </foreach>
+            </if>
+        </where>
+        order by t.create_time desc
+        limit 10
+    </select>
+
+    <select id="hasTask" resultType="java.lang.Integer">
+        select count(*)
+        from tbl_task t join `tbl_task_operator` top on t.id = top.task_id
+        <where>
+            top.`operator_id` = #{userId}
+            AND t.business_id = #{businessId}
+            AND t.`process_id` IN
+            <foreach collection="processIds" item="processId" open="(" separator="," close=")">
+                #{processId}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="pageTodoTask" resultType="com.kqinfo.universal.workflow.dto.TodoTaskPageDto">
+        select pi.business_id, p.name approve_name, p.description approve_desc,  pi.name task, t.name `approve_stage`, t.call_uri, t.create_time
+        from tbl_task t join `tbl_process_instance` pi on t.`instance_id` = pi.id
+                        join tbl_process p on t.process_id = p.id
+                        join `tbl_task_operator` top on t.id = top.task_id
+        <where>
+            t.tenant_id = #{tenantId}
+            AND top.`operator_id` = #{userId}
+            <if test="param.startDate != null and param.endDate != null">
+                and t.create_time between #{param.startDate}  and #{param.endDate}
+            </if>
+            <if test="param.task != null and param.task != ''">
+                and pi.name like CONCAT('%', #{param.task},'%')
+            </if>
+            <if test="!processIds.isEmpty()">
+                AND t.`process_id` in
+                <foreach collection="processIds" item="processId" open="(" separator="," close=")">
+                    #{processId}
+                </foreach>
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+</mapper>
