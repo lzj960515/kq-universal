@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.github.lzj960515</groupId>
         <artifactId>kq-universal-starter-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 ```
 
