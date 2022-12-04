@@ -16,8 +16,7 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class PageParam implements Serializable {
 
-    private static final long serialVersionUID = -5946600583467786752L;
-
+    private static final long serialVersionUID = 366317899784572306L;
     @ApiModelProperty("页码")
     private int current = 1;
 

@@ -23,7 +23,7 @@ public class AsyncProperties {
 
     private Integer queueCapacity = 200;
 
-    private boolean allowCoreThreadTimeOut = false;
+    private boolean allowCoreThreadTimeOut;
 
     private String threadNamePrefix = "kq-async-";
 

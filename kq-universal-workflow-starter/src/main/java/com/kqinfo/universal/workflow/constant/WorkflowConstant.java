@@ -6,7 +6,8 @@ package com.kqinfo.universal.workflow.constant;
  */
 public class WorkflowConstant {
 
-    private WorkflowConstant(){}
+    private WorkflowConstant() {
+    }
 
     /**
      * 下一任务节点的受理人

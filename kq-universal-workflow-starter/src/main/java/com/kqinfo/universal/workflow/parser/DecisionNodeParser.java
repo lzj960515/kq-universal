@@ -15,17 +15,17 @@ import java.util.List;
 @Component
 public class DecisionNodeParser extends NodeParser {
 
-	@Override
-	protected WorkNode newNode() {
-		return new DecisionNode();
-	}
+    @Override
+    protected WorkNode newNode() {
+        return new DecisionNode();
+    }
 
-	@Override
-	protected void parse(JSONObject nodeJson, WorkNode workNode) {
-		DecisionNode decisionNode = (DecisionNode) workNode;
-		decisionNode.setExpression(nodeJson.getStr("expression"));
-		final List<TransitionNode> transitionNodes = parseTransitionNode(nodeJson, true);
-		decisionNode.setTransitionNodes(transitionNodes);
-	}
+    @Override
+    protected void parse(JSONObject nodeJson, WorkNode workNode) {
+        DecisionNode decisionNode = (DecisionNode) workNode;
+        decisionNode.setExpression(nodeJson.getStr("expression"));
+        final List<TransitionNode> transitionNodes = parseTransitionNode(nodeJson, true);
+        decisionNode.setTransitions(transitionNodes);
+    }
 
 }

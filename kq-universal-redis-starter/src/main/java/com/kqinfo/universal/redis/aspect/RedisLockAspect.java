@@ -26,7 +26,6 @@ import org.springframework.expression.TypedValue;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
@@ -58,7 +57,7 @@ public class RedisLockAspect {
             // 根据策略加锁
             redisLock.lockStrategy().lock(lock, redisLock);
             // 兼容不抛出异常逻辑
-            if(LockStrategy.SKIP_AND_RETURN_NULL.equals(redisLock.lockStrategy())){
+            if(LockStrategy.SKIP_AND_RETURN_NULL == redisLock.lockStrategy()){
                 Boolean locked = LockContext.getAndRemove();
                 // locked为null, 表示加锁失败，直接返回null
                 if(locked == null){
@@ -76,6 +75,7 @@ public class RedisLockAspect {
     private String getRedisKey(ProceedingJoinPoint joinPoint, RedisLock redisLock){
         EvaluationContext context = new MethodBasedEvaluationContext(TypedValue.NULL, resolveMethod(joinPoint), joinPoint.getArgs(), parameterNameDiscoverer);
         StringBuilder sb = new StringBuilder();
+        sb.append(redisProperties.getPrefix()).append(redisLock.name());
         ExpressionParser parser = new SpelExpressionParser();
         for (String key : redisLock.keys()) {
             // keys是个spel表达式
@@ -83,10 +83,7 @@ public class RedisLockAspect {
             Object value = expression.getValue(context);
             sb.append(ObjectUtils.nullSafeToString(value));
         }
-        if(StringUtils.hasText(redisProperties.getPrefix())){
-            return redisProperties.getPrefix() + redisLock.name() + sb;
-        }
-        return redisLock.name() + sb;
+        return sb.toString();
     }
 
     private Method resolveMethod(ProceedingJoinPoint joinPoint) {

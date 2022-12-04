@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestService {
 
-    @StreamListener(queue = "user")
+    @StreamListener(queue = "${queue-name}")
     public void onUserMessage(StreamChannel<User> streamChannel){
         User user = streamChannel.getMessage();
         log.info("消费queue:{}中的信息:{}, 消息id:{}", streamChannel.getQueue(),  streamChannel.getMessage(),  streamChannel.getRecordId());

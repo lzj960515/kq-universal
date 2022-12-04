@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class DecisionNode extends WorkNode {
 
-	@ApiModelProperty(value = "条件表达式, 用于计算出下一个节点的名称")
-	private String expression;
+    @ApiModelProperty(value = "条件表达式, 用于计算出下一个节点的名称")
+    private String expression;
 
 }

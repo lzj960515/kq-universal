@@ -9,7 +9,7 @@
    <dependency>
      <groupId>com.github.lzj960515</groupId>
      <artifactId>kq-universal-async-starter</artifactId>
-     <version>1.3.2</version>
+     <version>1.1.0</version>
    </dependency>
    ```
 

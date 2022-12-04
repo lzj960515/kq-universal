@@ -1,5 +1,8 @@
 package com.kqinfo.universal.common.util;
 
+import cn.hutool.core.util.RandomUtil;
+import com.kqinfo.universal.common.exception.BusinessException;
+
 import java.util.regex.Pattern;
 
 /**
@@ -22,6 +25,9 @@ public final class PasswordUtil {
      * @return 安全等级
      */
     public static int checkPasswordSecurity(String password){
+        if(password == null || password.length() < 8){
+            return 0;
+        }
         int level = 0;
         if (NUMBER_PATTERN.matcher(password).matches()) {
             level ++ ;
@@ -33,5 +39,34 @@ public final class PasswordUtil {
             level ++ ;
         }
         return level;
+    }
+
+    /**
+     * 校验密码强度，安全等级小于2则抛出异常
+     * @param password 密码
+     */
+    public static void validPasswordSecurity(String password){
+        validPasswordSecurity(password, "密码安全等级过低");
+    }
+
+    public static void validPasswordSecurity(String password, String message){
+        int level = checkPasswordSecurity(password);
+        if(level < 2){
+            throw new BusinessException(message);
+        }
+    }
+
+    /**
+     * 生成随机密码
+     * @return 随机密码
+     */
+    public static String generatePasswd(){
+        while (true){
+            String passwd = RandomUtil.randomString(12);
+            int level = checkPasswordSecurity(passwd);
+            if(level >= 2){
+                return passwd;
+            }
+        }
     }
 }

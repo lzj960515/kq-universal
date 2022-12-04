@@ -36,6 +36,7 @@ public class DelayTaskExecutor {
             // 时间归整
             Thread.sleep(1000 - now % 1000);
         } catch (InterruptedException ignore) {
+            Thread.currentThread().interrupt();
         }
         this.queryTask();
         this.executeTask();

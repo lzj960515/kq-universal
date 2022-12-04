@@ -1,8 +1,5 @@
 package com.kqinfo.universal.delay.task.core.domain;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 /**
  * 延时任务信息
  *
@@ -48,11 +45,12 @@ public class DelayTaskInfo {
 
     public DelayTaskInfo(){}
 
-    public DelayTaskInfo(Long id, String name, String info, Long executeTime) {
+    public DelayTaskInfo(Long id, String name, String info, Long executeTime, Integer executeStatus) {
         this.id = id;
         this.name = name;
         this.info = info;
         this.executeTime = executeTime;
+        this.executeStatus = executeStatus;
     }
 
     public Long getId() {

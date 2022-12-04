@@ -12,16 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class NodeHandler {
 
-	@Autowired
-	protected WorkflowHandler workflowHandler;
-	@Autowired
-	protected WorkflowListenerExecutor workflowListenerExecutor;
+    @Autowired
+    protected WorkflowHandler workflowHandler;
+    @Autowired
+    protected WorkflowListenerExecutor workflowListenerExecutor;
 
-	/**
-	 * 执行节点任务
-	 * @param workNode 节点
-	 * @param execution 执行对象
-	 */
-	public abstract void execute(WorkNode workNode, Execution execution);
+    /**
+     * 执行节点任务
+     *
+     * @param workNode  节点
+     * @param execution 执行对象
+     */
+    public abstract void execute(WorkNode workNode, Execution execution);
 
 }

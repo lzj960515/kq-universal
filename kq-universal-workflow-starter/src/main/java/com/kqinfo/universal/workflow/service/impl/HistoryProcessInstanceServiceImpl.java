@@ -17,22 +17,22 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class HistoryProcessInstanceServiceImpl extends
-		ServiceImpl<HistoryProcessInstanceMapper, HistoryProcessInstance> implements HistoryProcessInstanceService {
+        ServiceImpl<HistoryProcessInstanceMapper, HistoryProcessInstance> implements HistoryProcessInstanceService {
 
-	@Override
-	public void create(ProcessInstance processInstance) {
-		HistoryProcessInstance historyProcessInstance = new HistoryProcessInstance();
-		BeanUtils.copyProperties(processInstance, historyProcessInstance);
-		historyProcessInstance.setStatus(StatusEnum.START.value());
-		super.save(historyProcessInstance);
-	}
+    @Override
+    public void create(ProcessInstance processInstance) {
+        HistoryProcessInstance historyProcessInstance = new HistoryProcessInstance();
+        BeanUtils.copyProperties(processInstance, historyProcessInstance);
+        historyProcessInstance.setStatus(StatusEnum.START.value());
+        super.save(historyProcessInstance);
+    }
 
-	@Override
-	public void complete(Long processInstanceId, Integer status) {
-		HistoryProcessInstance historyProcessInstance = new HistoryProcessInstance();
-		historyProcessInstance.setId(processInstanceId);
-		historyProcessInstance.setStatus(status);
-		super.updateById(historyProcessInstance);
-	}
+    @Override
+    public void complete(Long processInstanceId, Integer status) {
+        HistoryProcessInstance historyProcessInstance = new HistoryProcessInstance();
+        historyProcessInstance.setId(processInstanceId);
+        historyProcessInstance.setStatus(status);
+        super.updateById(historyProcessInstance);
+    }
 
 }

@@ -17,20 +17,20 @@ import javax.annotation.Resource;
 @Component
 public class TaskHandler extends NodeHandler {
 
-	@Resource
-	private TaskService taskService;
+    @Resource
+    private TaskService taskService;
 
-	@Override
-	public void execute(WorkNode workNode, Execution execution) {
-		TaskNode taskNode = (TaskNode) workNode;
-		final ProcessInstance processInstance = execution.getProcessInstance();
-		// 保存任务
-		taskService.create(taskNode.getName(), execution.getTask() != null ? execution.getTask().getId() : 0L,
-				execution.getProcess().getId(),
-				processInstance,
-				JSONUtil.parseObj(execution.getVariables()),
-				taskNode);
+    @Override
+    public void execute(WorkNode workNode, Execution execution) {
+        TaskNode taskNode = (TaskNode) workNode;
+        final ProcessInstance processInstance = execution.getProcessInstance();
+        // 保存任务
+        taskService.create(taskNode.getName(), execution.getTask() != null ? execution.getTask().getId() : 0L,
+                execution.getProcess().getId(),
+                processInstance,
+                JSONUtil.parseObj(execution.getVariables()),
+                taskNode);
 
-	}
+    }
 
 }

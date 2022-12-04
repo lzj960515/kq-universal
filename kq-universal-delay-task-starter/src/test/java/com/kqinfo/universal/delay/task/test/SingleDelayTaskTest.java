@@ -1,6 +1,7 @@
 package com.kqinfo.universal.delay.task.test;
 
 import com.kqinfo.universal.delay.task.core.DelayTaskTemplate;
+import com.kqinfo.universal.delay.task.thread.ThreadUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -33,6 +34,20 @@ public class SingleDelayTaskTest {
     public void testLongTimeDelayTask() throws IOException {
         delayTaskTemplate.save("demoJob2", "1", LocalDateTime.now().plusSeconds(10), "测试任务");
         System.out.println("保存延时任务，时间："+ LocalDateTime.now());
+        System.in.read();
+    }
+
+    @Test
+    public void testDelayTaskNow() throws IOException {
+        delayTaskTemplate.save("demoJob", "1", LocalDateTime.now(), "测试任务");
+        System.in.read();
+    }
+
+    @Test
+    public void testLotSlowDelayTask() throws IOException {
+        for (int i = 0; i < 200; i++) {
+            delayTaskTemplate.save("demoJob2", i + "", LocalDateTime.now().plusSeconds(10), "测试任务");
+        }
         System.in.read();
     }
 }

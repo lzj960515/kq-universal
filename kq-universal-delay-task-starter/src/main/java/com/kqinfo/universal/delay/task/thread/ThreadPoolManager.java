@@ -17,7 +17,7 @@ public final class ThreadPoolManager {
 
     public static ExecutorService getExecutor(String threadName) {
         final int count = ThreadUtil.getSuitableThreadCount();
-        return new ThreadPoolExecutor(count, count, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>(Integer.MAX_VALUE), new NameThreadFactory(threadName));
+        return new ThreadPoolExecutor(count, count*2, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>(Integer.MAX_VALUE), new NameThreadFactory(threadName));
     }
 
     public static ExecutorService getSingleExecutor(String threadName) {

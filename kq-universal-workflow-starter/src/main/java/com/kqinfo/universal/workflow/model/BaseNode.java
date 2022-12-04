@@ -15,13 +15,13 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class BaseNode {
 
-	@ApiModelProperty("节点名称")
-	private String name;
+    @ApiModelProperty("节点名称")
+    private String name;
 
-	/**
-	 * @see NodeEnum
-	 */
-	@ApiModelProperty("节点类型")
-	private String type;
+    /**
+     * @see NodeEnum
+     */
+    @ApiModelProperty("节点类型")
+    private String type;
 
 }

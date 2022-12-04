@@ -8,26 +8,30 @@ import com.kqinfo.universal.common.response.ResultCode;
  */
 public class BusinessException extends RuntimeException {
 
-	private static final long serialVersionUID = 8195203362613461975L;
+    private static final long serialVersionUID = 8355761362309363832L;
+    private final Integer code;
 
-	private final Integer code;
+    public Integer getCode() {
+        return code;
+    }
 
-	public Integer getCode() {
-		return code;
-	}
+    public BusinessException(String message, Throwable cause) {
+        super(message, cause);
+        this.code = -1;
+    }
 
-	public BusinessException(String message) {
-		this(-1, message);
-	}
+    public BusinessException(String message) {
+        this(-1, message);
+    }
 
-	public BusinessException(Integer code, String message) {
-		super(message);
-		this.code = code;
-	}
+    public BusinessException(Integer code, String message) {
+        super(message);
+        this.code = code;
+    }
 
-	public BusinessException(ResultCode status) {
-		super(status.message());
-		this.code = status.code();
-	}
+    public BusinessException(ResultCode status) {
+        super(status.message());
+        this.code = status.code();
+    }
 
 }

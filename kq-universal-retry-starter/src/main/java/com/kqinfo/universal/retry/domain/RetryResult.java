@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 public class RetryResult {
 
-    boolean success;
+    private boolean success;
 
     private String failReason;
 

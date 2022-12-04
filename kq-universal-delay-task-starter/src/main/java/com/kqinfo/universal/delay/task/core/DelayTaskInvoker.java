@@ -35,6 +35,10 @@ public final class DelayTaskInvoker implements Runnable {
 
     private void invoke() {
         DelayTaskInfo delayTaskInfo = delayTaskDao.findById(taskId);
+        // 判断任务状态
+        if(!ExecuteStatus.NEW.status().equals(delayTaskInfo.getExecuteStatus())){
+            return;
+        }
         // 1.修改任务状态为执行中
         delayTaskDao.updateStatus(taskId, ExecuteStatus.EXECUTE.status(), "");
         // 2.调用延迟任务

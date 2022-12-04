@@ -22,41 +22,41 @@ import java.util.Map;
 @Component
 public class DecisionHandler extends NodeHandler {
 
-	ExpressionParser parser = new SpelExpressionParser();
+    private final ExpressionParser parser = new SpelExpressionParser();
 
-	@Override
-	public void execute(WorkNode workNode, Execution execution) {
-		DecisionNode decisionNode = (DecisionNode) workNode;
-		final Map<String, Object> variables = execution.getVariables();
-		if (StringUtils.hasText(decisionNode.getExpression())) {
-			String nextNode = parse(String.class, decisionNode.getExpression(), variables);
-			if (StringUtils.hasText(nextNode)) {
-				// 找到下一个节点
-				final WorkNode node = workflowHandler.getNode(nextNode, execution.getWorkNodes());
-				workflowHandler.execute(node, execution);
-				return;
-			}
-		}
-		final List<TransitionNode> transitionNodes = decisionNode.getTransitionNodes();
-		for (TransitionNode transitionNode : transitionNodes) {
-			if (StringUtils.hasText(transitionNode.getExpression())) {
-				Boolean find = parse(Boolean.class, transitionNode.getExpression(), variables);
-				if (Boolean.TRUE.equals(find)) {
-					final WorkNode node = workflowHandler.getNode(transitionNode.getTo(), execution.getWorkNodes());
-					workflowHandler.execute(node, execution);
-					return;
-				}
-			}
-		}
-		throw new WorkflowException(execution.getProcessInstance().getId() + "->decision无法确定下一个节点");
-	}
+    @Override
+    public void execute(WorkNode workNode, Execution execution) {
+        DecisionNode decisionNode = (DecisionNode) workNode;
+        final Map<String, Object> variables = execution.getVariables();
+        if (StringUtils.hasText(decisionNode.getExpression())) {
+            String nextNode = parse(String.class, decisionNode.getExpression(), variables);
+            if (StringUtils.hasText(nextNode)) {
+                // 找到下一个节点
+                final WorkNode node = workflowHandler.getNode(nextNode, execution.getWorkNodes());
+                workflowHandler.execute(node, execution);
+                return;
+            }
+        }
+        final List<TransitionNode> transitionNodes = decisionNode.getTransitions();
+        for (TransitionNode transitionNode : transitionNodes) {
+            if (StringUtils.hasText(transitionNode.getExpression())) {
+                Boolean find = parse(Boolean.class, transitionNode.getExpression(), variables);
+                if (Boolean.TRUE.equals(find)) {
+                    final WorkNode node = workflowHandler.getNode(transitionNode.getTo(), execution.getWorkNodes());
+                    workflowHandler.execute(node, execution);
+                    return;
+                }
+            }
+        }
+        throw new WorkflowException(execution.getProcessInstance().getId() + "->decision无法确定下一个节点");
+    }
 
-	public <T> T parse(Class<T> resultType, String expr, Map<String, Object> args) {
-		EvaluationContext context = new StandardEvaluationContext();
-		for (Map.Entry<String, Object> entry : args.entrySet()) {
-			context.setVariable(entry.getKey(), entry.getValue());
-		}
-		return parser.parseExpression(expr).getValue(context, resultType);
-	}
+    public <T> T parse(Class<T> resultType, String expr, Map<String, Object> args) {
+        EvaluationContext context = new StandardEvaluationContext();
+        for (Map.Entry<String, Object> entry : args.entrySet()) {
+            context.setVariable(entry.getKey(), entry.getValue());
+        }
+        return parser.parseExpression(expr).getValue(context, resultType);
+    }
 
 }

@@ -16,64 +16,12 @@ import java.util.concurrent.TimeUnit;
 public final class ThreadUtil {
 
     private static final Logger log = LoggerFactory.getLogger(ThreadUtil.class);
-    
-    /**
-     * Wait.
-     *
-     * @param object load object
-     */
-    public static void objectWait(Object object) {
-        try {
-            object.wait();
-        } catch (InterruptedException ignore) {
-            Thread.interrupted();
-        }
-    }
-    
-    /**
-     * Sleep.
-     *
-     * @param millis sleep millisecond
-     */
-    public static void sleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
+    private static final int THREAD_MULTIPLE = 4;
+
     
     public static void countDown(CountDownLatch latch) {
         Objects.requireNonNull(latch, "latch");
         latch.countDown();
-    }
-    
-    /**
-     * Await count down latch.
-     *
-     * @param latch count down latch
-     */
-    public static void latchAwait(CountDownLatch latch) {
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-    
-    /**
-     * Await count down latch with timeout.
-     *
-     * @param latch count down latch
-     * @param time  timeout time
-     * @param unit  time unit
-     */
-    public static void latchAwait(CountDownLatch latch, long time, TimeUnit unit) {
-        try {
-            latch.await(time, unit);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
     
     /**
@@ -117,7 +65,7 @@ public final class ThreadUtil {
                 }
             } catch (InterruptedException e) {
                 executor.shutdownNow();
-                Thread.interrupted();
+                Thread.currentThread().interrupt();
             } catch (Throwable ex) {
                 log.error("ThreadPoolManager shutdown executor has error", ex);
             }
@@ -128,7 +76,5 @@ public final class ThreadUtil {
     public static void addShutdownHook(Runnable runnable) {
         Runtime.getRuntime().addShutdownHook(new Thread(runnable));
     }
-    
-    private static final int THREAD_MULTIPLE = 2;
-    
+
 }

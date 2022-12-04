@@ -26,11 +26,10 @@ public final class KqEnumUtil {
      * 通过test1获取对应的desc1， 则为getField1ByField2(TestEnum.class, "desc", "code", "test1")
      * @return filed2Value
      */
-    public static <T> T getField1ByField2(Class<? extends Enum<?>> enumClass, String field1, String field2, Object field1Value){
+    public static Object getField1ByField2(Class<? extends Enum<?>> enumClass, String field1, String field2, Object field1Value){
         if (!enumClass.isEnum()) {
             throw new RuntimeException(enumClass.getName() + " is not enum class");
         }
-        Enum<?>[] enumConstants = enumClass.getEnumConstants();
         Field field1Field = ReflectionUtils.findField(enumClass, field1);
         if (field1Field == null){
             throw new RuntimeException("no such field ["+ field1 + "] in " + enumClass.getName());
@@ -41,21 +40,22 @@ public final class KqEnumUtil {
             throw new RuntimeException("no such field ["+ field2 + "] in " + enumClass.getName());
         }
         ReflectionUtils.makeAccessible(field2Field);
+        Enum<?>[] enumConstants = enumClass.getEnumConstants();
         for (Enum<?> enumConstant : enumConstants) {
             Object value = ReflectionUtils.getField(field2Field, enumConstant);
             if(field1Value.equals(value)){
-                return (T) ReflectionUtils.getField(field1Field, enumConstant);
+                return ReflectionUtils.getField(field1Field, enumConstant);
             }
         }
         return null;
     }
 
 
-    public static <T> T getDescByCode(Class<? extends Enum<?>> enumClass, Object code){
+    public static Object getDescByCode(Class<? extends Enum<?>> enumClass, Object code){
         return getField1ByField2(enumClass, DefaultEnum.DESC, DefaultEnum.CODE, code);
     }
 
-    public static <T> T getCodeByDesc(Class<? extends Enum<?>> enumClass, Object desc){
+    public static Object getCodeByDesc(Class<? extends Enum<?>> enumClass, Object desc){
         return getField1ByField2(enumClass, DefaultEnum.CODE, DefaultEnum.DESC, desc);
     }
 

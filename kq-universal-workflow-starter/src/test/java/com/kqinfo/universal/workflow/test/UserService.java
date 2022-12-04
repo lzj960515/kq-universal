@@ -25,7 +25,7 @@ public class UserService implements WorkflowUserService {
         int i = 1;
         for (String userId : userIds) {
             userDtos.add(new UserDto(userId, "张三" + i));
-            i ++ ;
+            i++;
         }
         return userDtos;
     }

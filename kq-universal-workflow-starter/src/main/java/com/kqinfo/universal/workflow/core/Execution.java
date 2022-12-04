@@ -16,16 +16,16 @@ import java.util.Map;
 @Data
 public class Execution {
 
-	private WorkflowEngine workflowEngine;
+    private WorkflowEngine workflowEngine;
 
-	private Process process;
+    private Process process;
 
-	private ProcessInstance processInstance;
+    private ProcessInstance processInstance;
 
-	private Task task;
+    private Task task;
 
-	private List<WorkNode> workNodes;
+    private List<WorkNode> workNodes;
 
-	private Map<String, Object> variables;
+    private Map<String, Object> variables;
 
 }

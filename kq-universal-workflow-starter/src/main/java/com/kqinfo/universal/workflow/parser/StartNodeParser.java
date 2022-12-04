@@ -15,16 +15,16 @@ import java.util.List;
 @Component
 public class StartNodeParser extends NodeParser {
 
-	@Override
-	protected WorkNode newNode() {
-		return new StartNode();
-	}
+    @Override
+    protected WorkNode newNode() {
+        return new StartNode();
+    }
 
-	@Override
-	protected void parse(JSONObject nodeJson, WorkNode workNode) {
-		StartNode startNode = (StartNode) workNode;
-		final List<TransitionNode> transitionNodes = parseTransitionNode(nodeJson);
-		startNode.setTransitionNodes(transitionNodes);
-	}
+    @Override
+    protected void parse(JSONObject nodeJson, WorkNode workNode) {
+        StartNode startNode = (StartNode) workNode;
+        final List<TransitionNode> transitionNodes = parseTransitionNode(nodeJson);
+        startNode.setTransitions(transitionNodes);
+    }
 
 }

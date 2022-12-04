@@ -20,8 +20,8 @@ import com.kqinfo.universal.workflow.domain.TaskOperator;
 import com.kqinfo.universal.workflow.dto.ApproveProgressDto;
 import com.kqinfo.universal.workflow.dto.TaskLogDto;
 import com.kqinfo.universal.workflow.dto.TodoTaskDto;
-import com.kqinfo.universal.workflow.dto.TodoTaskPageParam;
 import com.kqinfo.universal.workflow.dto.TodoTaskPageDto;
+import com.kqinfo.universal.workflow.dto.TodoTaskPageParam;
 import com.kqinfo.universal.workflow.dto.UserDto;
 import com.kqinfo.universal.workflow.exception.WorkflowException;
 import com.kqinfo.universal.workflow.mapper.TaskMapper;
@@ -79,7 +79,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         task.setBusinessId(processInstance.getBusinessId());
         task.setTenantId(WorkflowContext.getTenantId());
         String callUri = workflowHandler.parseCallUri(taskNode.getCallUri(), processInstance.getBusinessId());
-        if(StringUtils.isEmpty(callUri)){
+        if (StringUtils.isEmpty(callUri)) {
             callUri = processInstance.getCallUri();
         }
         task.setCallUri(callUri);
@@ -90,7 +90,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         if (variables.containsKey(WorkflowConstant.NEXT_TASK_ASSIGNEE)) {
             taskUserJson = variables.getJSONObject(WorkflowConstant.NEXT_TASK_ASSIGNEE);
         } else {
-            taskUserJson =  assignHandler.getAssign(taskNode);
+            taskUserJson = assignHandler.getAssign(taskNode);
         }
         taskUserJson.forEach((userId, username) -> this.createTaskOperator(task.getId(), userId, username.toString()));
         return task;
@@ -117,7 +117,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     @Override
     public Task complete(String processName, String businessId, String operator, Integer status, String reason) {
         final Task task = getTask(businessId, processName);
-        if(task == null){
+        if (task == null) {
             throw new WorkflowException("未找到需要审核的任务");
         }
         final List<TaskOperator> taskOperators = taskOperatorService.listByTaskId(task.getId());
@@ -170,7 +170,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
 
     @Override
     public List<TodoTaskDto> listTodoTaskByDesc(String tenantId, String userId, String processDefDesc) {
-        if(StringUtils.hasText(processDefDesc)){
+        if (StringUtils.hasText(processDefDesc)) {
             List<Long> processIds = getProcessIdsByDesc(processDefDesc);
             return super.baseMapper.selectTodoTask(tenantId, userId, processIds);
         }
@@ -220,12 +220,29 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         return buildResultNodes(sortNodes, historyTasks, task);
     }
 
-    private List<ApproveProgressDto> buildResultNodes(List<ApproveProgressDto> sortNodes, List<HistoryTask> historyTasks, Task task){
+    @Override
+    public void rollbackToPreTask(Task task) {
+        Long parentId = task.getParentId();
+        HistoryTask historyTask = historyTaskService.getById(parentId);
+        Task preTask = new Task();
+        preTask.setName(historyTask.getName());
+        preTask.setParentId(historyTask.getParentId());
+        preTask.setProcessId(historyTask.getProcessId());
+        preTask.setInstanceId(historyTask.getInstanceId());
+        preTask.setTenantId(historyTask.getTenantId());
+        preTask.setBusinessId(historyTask.getBusinessId());
+        preTask.setCallUri(historyTask.getCallUri());
+        super.save(preTask);
+        // 保存任务受理人
+        taskOperatorService.savePreTaskOperator(parentId, preTask.getId());
+    }
+
+    private List<ApproveProgressDto> buildResultNodes(List<ApproveProgressDto> sortNodes, List<HistoryTask> historyTasks, Task task) {
         // 先根据历史任务组装审核进度
         final Map<String, HistoryTask> historyTaskMap = historyTasks.stream().collect(Collectors.toMap(HistoryTask::getName, Function.identity()));
         List<ApproveProgressDto> returnNodes = new ArrayList<>(sortNodes.size());
         for (ApproveProgressDto sortNode : sortNodes) {
-            if(historyTaskMap.containsKey(sortNode.getPointName())){
+            if (historyTaskMap.containsKey(sortNode.getPointName())) {
                 // 如果历史任务完成了该节点，则将该节点添加到审核进度中
                 // 判断任务是否审核通过
                 final HistoryTask historyTask = historyTaskMap.get(sortNode.getPointName());
@@ -235,18 +252,19 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
                 } else {
                     sortNode.setApproved(1);
                 }
+                sortNode.setOperator(historyTask.getOperatorName());
                 returnNodes.add(sortNode);
             }
         }
         // 当有执行任务时从流程定义中获取到后续的节点
-        if(task != null){
+        if (task != null) {
             boolean startAdd = false;
             for (ApproveProgressDto sortNode : sortNodes) {
-                if(startAdd){
+                if (startAdd) {
                     returnNodes.add(sortNode);
                 }
                 // 定位到当前审核中的节点
-                if(!startAdd && sortNode.getPointName().equals(task.getName())){
+                if (!startAdd && sortNode.getPointName().equals(task.getName())) {
                     returnNodes.add(sortNode);
                     // 并把后续的所有节点加到进度中
                     startAdd = true;

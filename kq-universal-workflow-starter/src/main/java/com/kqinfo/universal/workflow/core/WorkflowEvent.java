@@ -10,4 +10,6 @@ import lombok.Data;
 public class WorkflowEvent {
 
     private String businessId;
+
+    private String operator;
 }

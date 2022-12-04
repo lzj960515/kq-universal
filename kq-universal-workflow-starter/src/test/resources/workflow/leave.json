@@ -1,51 +1,51 @@
 {
-  "name":"请假审批",
+  "name": "请假审批",
   "desc": "请假审批描述",
   "callUri": "'/process/test/detail?id='+#businessId",
-  "nodes":[
+  "nodes": [
     {
-      "type":"start",
-      "name":"start1",
-      "transitions":[
+      "type": "start",
+      "name": "start1",
+      "transitions": [
         {
-          "name":"transition1",
-          "type":"transition",
-          "to":"组长审批"
+          "name": "transition1",
+          "type": "transition",
+          "to": "组长审批"
         }
       ]
     },
     {
-      "type":"task",
-      "name":"组长审批",
-      "assignee":"",
+      "type": "task",
+      "name": "组长审批",
+      "assignee": "",
       "role": "user",
       "sequence": "1",
-      "transitions":[
+      "transitions": [
         {
-          "to":"decision1"
+          "to": "decision1"
         }
       ]
     },
     {
-      "type":"decision",
-      "name":"decision1",
+      "type": "decision",
+      "name": "decision1",
       "expression": "#day<2 ? 'end1' : '部门审批'"
     },
     {
-      "type":"task",
-      "name":"部门审批",
-      "assignee":"",
+      "type": "task",
+      "name": "部门审批",
+      "assignee": "",
       "role": "admin",
       "sequence": "2",
-      "transitions":[
+      "transitions": [
         {
-          "to":"end1"
+          "to": "end1"
         }
       ]
     },
     {
-      "type":"end",
-      "name":"end1"
+      "type": "end",
+      "name": "end1"
     }
   ]
 }

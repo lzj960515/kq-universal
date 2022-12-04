@@ -16,16 +16,16 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class TaskNode extends WorkNode {
 
-	@ApiModelProperty("受理人")
-	private String assignee;
+    @ApiModelProperty("受理人")
+    private String assignee;
 
-	@ApiModelProperty("角色")
-	private String role;
+    @ApiModelProperty("角色")
+    private String role;
 
-	@ApiModelProperty("顺序")
-	private Integer sequence;
+    @ApiModelProperty("顺序")
+    private Integer sequence;
 
-	@ApiModelProperty("回调地址")
-	private String callUri;
+    @ApiModelProperty("回调地址")
+    private String callUri;
 
 }

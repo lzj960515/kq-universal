@@ -1,25 +1,15 @@
 package com.kqinfo.universal.stream.core;
 
 import com.kqinfo.universal.stream.annotation.StreamListener;
-import com.kqinfo.universal.stream.util.Group;
 import com.kqinfo.universal.stream.util.MessageHandler;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.stream.Consumer;
-import org.springframework.data.redis.connection.stream.ObjectRecord;
-import org.springframework.data.redis.connection.stream.ReadOffset;
-import org.springframework.data.redis.connection.stream.StreamOffset;
-import org.springframework.data.redis.stream.StreamMessageListenerContainer;
-import org.springframework.util.Assert;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
+import org.springframework.lang.NonNull;
 
 import java.lang.reflect.Method;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Zijian Liao
  * @since 1.0.0
  */
-public abstract class StreamListenerContext implements ApplicationListener<ApplicationStartedEvent>, DisposableBean {
+public abstract class StreamListenerContext implements ApplicationListener<ApplicationStartedEvent>, DisposableBean, EnvironmentAware {
 
     protected final MessageHandler messageHandler;
     /**
@@ -62,12 +52,14 @@ public abstract class StreamListenerContext implements ApplicationListener<Appli
     abstract <T> void doRegisterConsumer(StreamListener streamListener, Object bean, Method method, Class<T> type);
 
     private void registerMethodHandler(StreamListener streamListener, Object bean, Method method) {
-        String key = getKey(streamListener.queue(), streamListener.group(), streamListener.consumer());
-        if (methodHandlerRepository.containsKey(key)) {
+        String queue = this.findQueue(streamListener.queue());
+        String key = getKey(queue, streamListener.group(), streamListener.consumer());
+        MethodHandler methodHandler = methodHandlerRepository.get(key);
+        if (methodHandler != null) {
             throw new RuntimeException("队列{" + key + "}重复于 " + bean.getClass() + "." + method.getName()
-                    + "和" + methodHandlerRepository.get(key).getBean().getClass() + "." + methodHandlerRepository.get(key).getMethod().getName());
+                    + "和" + methodHandler.getBean().getClass() + "." + methodHandler.getMethod().getName());
         }
-        methodHandlerRepository.put(key, new MethodHandler(streamListener.queue(), bean, method));
+        methodHandlerRepository.put(key, new MethodHandler(queue, bean, method));
     }
 
     protected String getKey(String queue, String group, String consumer) {
@@ -89,5 +81,19 @@ public abstract class StreamListenerContext implements ApplicationListener<Appli
         String key = getKey(queue, group, consumer);
         MethodHandler methodHandler = methodHandlerRepository.get(key);
         methodHandler.routeMessage(new StreamChannel<T>(group, message, messageHandler, queue, recordId));
+    }
+
+    private Environment environment;
+
+    @Override
+    public void setEnvironment(@NonNull Environment environment) {
+        this.environment = environment;
+    }
+
+    protected String findQueue(String queue){
+        if(queue.startsWith("${") && queue.endsWith("}")){
+            return environment.getRequiredProperty(queue.substring(2, queue.length() - 1));
+        }
+        return queue;
     }
 }

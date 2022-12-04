@@ -133,7 +133,7 @@ public final class HttpUtil {
     }
 
     private static String message(JSONObject resultJson) {
-        log.error("调用外部接口口发生异常：{}", resultJson.toString());
+        log.error("调用外部接口口发生异常：{}", resultJson);
         return "调用外部接口口发生异常";
     }
 

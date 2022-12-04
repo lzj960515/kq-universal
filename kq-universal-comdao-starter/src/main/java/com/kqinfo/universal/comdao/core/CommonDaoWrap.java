@@ -30,9 +30,9 @@ import static com.kqinfo.universal.comdao.core.SqlBuilder.UP_COMMA;
 public class CommonDaoWrap {
 
 
-    final static String KEY_SELF_SQL = "selfSQL";
+    private final static String KEY_SELF_SQL = "selfSQL";
     @Resource
-    CommonDao dao;
+    private CommonDao dao;
 
     /**
      * 插入一个实体，主键必须为空,其它属性为空时，插入时忽略该属性
@@ -50,7 +50,7 @@ public class CommonDaoWrap {
                             field.set(params, selectCountBySQL("select LAST_INSERT_ID()", null));
                         }
                         if (field.getType() == Integer.class) {
-                            field.set(params, Long.valueOf(selectCountBySQL("select LAST_INSERT_ID()", null)).intValue());
+                            field.set(params, (int) selectCountBySQL("select LAST_INSERT_ID()", null));
                         }
                     }
                 } catch (IllegalAccessException e) {

@@ -20,16 +20,21 @@
 ### 定义流程
 
 在`resources`目录下新建目录`workflow`, 在`workflow`目录下新建流程定义文件，json格式，如：
+
 ```
 resources
 └── workflow
     └── simple.json
 ```
+
+同样的，你也可以使用[java代码的方式](src/test/java/com/kqinfo/universal/workflow/test/ProcessConfigTest.java)定义流程
+
 以下为一个简单的流程设计：开始 -> 组长审核 -> 部门审核 -> 结束
 
 ```json
 {
   "name":"测试流程",
+  "desc":"测试流程",
   "callUri": "'/process/test/detail?id='+#businessId",
   "nodes":[
     {
@@ -82,6 +87,8 @@ resources
 #### 名称解释
 
 name: 流程定义名称
+
+desc: 流程定义描述
 
 callUri: 回调地址，一般用于在待办任务中跳转到业务详情页, #businessId为业务id字段，固定写为#businessId
 
@@ -344,6 +351,11 @@ public class LeaderEventListener implements WorkflowListener  {
     public void onWorkflowEvent(WorkflowEvent event) {
         System.out.println("收到leaderEvent事件, businessId:" + event.getBusinessId());
     }
+
+    @Override
+    public void onRejectEvent(WorkflowEvent event) {
+        System.out.println("收到leaderEvent拒绝事件, businessId:" + event.getBusinessId());
+    }
 }
 ```
 
@@ -395,18 +407,32 @@ public interface WorkflowUserService {
 public interface WorkflowInvoker {
 
     /**
-     * 通过流程定义名称启动流程
+     * 通过流程定义名称启动流程, 如果流程存在，取消之前流程并重新发起
      * @param processStartDto 流程启动参数
      * @return 流程状态 1.审核中 2.审核通过 3.驳回
      */
     Integer startProcessByName(ProcessStartDto processStartDto);
 
     /**
-     * 通过流程定义名称启动流程, 并执行第一个任务
+     * 通过流程定义名称启动流程, 如果流程存在，抛出异常
+     * @param processStartDto 流程启动参数
+     * @return 流程状态 1.审核中 2.审核通过 3.驳回
+     */
+    Integer startProcessByNameNoCancel(ProcessStartDto processStartDto);
+
+    /**
+     * 通过流程定义名称启动流程, 并执行第一个任务, 如果流程存在，取消之前流程并重新发起
      * @param processStartDto 流程启动参数
      * @return 流程状态 1.审核中 2.审核通过 3.驳回
      */
     Integer startProcessAndExecuteFirstTask(ProcessStartDto processStartDto);
+
+    /**
+     * 通过流程定义名称启动流程, 并执行第一个任务, 如果流程存在，抛出异常
+     * @param processStartDto 流程启动参数
+     * @return 流程状态 1.审核中 2.审核通过 3.驳回
+     */
+    Integer startProcessAndExecuteFirstTaskNoCancel(ProcessStartDto processStartDto);
 
     /**
      * 执行任务
@@ -426,13 +452,41 @@ public interface WorkflowInvoker {
     Integer rejectTask(String processDefName, String businessId, String operator, String reason);
 
     /**
-     * 查询待办任务列表
+     * 驳回到上个节点，如果上个节点是开始节点，则直接驳回任务并结束流程
+     * @param processDefName 流程定义名称
+     * @param businessId 业务id
+     * @param operator 任务受理人
+     * @param reason 原因
+     * @return 流程状态 1.审核中 2.审核通过 3.驳回
+     */
+    Integer rejectToPreNode(String processDefName, String businessId, String operator, String reason);
+
+    /**
+     * 取消流程
+     * @param processDefName 流程定义名称
+     * @param businessId 业务id
+     * @param operator 取消人
+     * @return 流程状态 4.取消审核
+     */
+    Integer cancelProcess(String processDefName, String businessId, String operator);
+
+    /**
+     * 查询10条待办任务，对标首页展示需求
      * @param tenantId 租户id
      * @param operator 用户id
      * @param processDefName 流程名称
      * @return 办任务列表
      */
     List<TodoTaskDto> listTodoTask(String tenantId, String operator, String processDefName);
+
+    /**
+     * 查询10条待办任务，对标首页展示需求
+     * @param tenantId 租户id
+     * @param operator 用户id
+     * @param processDefDesc 流程描述
+     * @return 办任务列表
+     */
+    List<TodoTaskDto> listTodoTaskByDesc(String tenantId, String operator, String processDefDesc);
 
     /**
      * 分页查询待办任务列表
@@ -468,6 +522,34 @@ public interface WorkflowInvoker {
      */
     List<ApproveProgressDto> approveProgress(String businessId, String processDefName);
 
+    /**
+     * 获取任务
+     * @param businessId 业务id
+     * @param processDefName 流程定义名称
+     * @return 任务
+     */
+    Task getTask(String businessId, String processDefName);
+
+}
+```
+
+### 异常处理
+
+流程引擎中出现异常将抛出WorkflowException, 使用者可使用Spring异常捕获切面进行统一拦截处理，也可以try catch手动处理
+
+示例：
+
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(WorkflowException.class)
+    public ResponseEntity<?> handlerException(WorkflowException ex) {
+        Map<String, Object> error = new HashMap<>(2, 1);
+        error.put("code", -1);
+        error.put("msg", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.OK);
+    }
 }
 ```
 

@@ -27,7 +27,7 @@ public class SimpleTest {
     private WorkflowInvoker workflowInvoker;
 
     @Test
-    public void testStart(){
+    public void testStart() {
         ProcessStartDto processStartDto = new ProcessStartDto();
         processStartDto.setTenantId(2L);
         processStartDto.setProcessDefName(TEST);
@@ -39,7 +39,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void testExecuteTask(){
+    public void testExecuteTask() {
         {
             ExecuteTaskDto executeTaskDto = new ExecuteTaskDto();
             executeTaskDto.setProcessDefName(TEST);
@@ -61,13 +61,19 @@ public class SimpleTest {
     }
 
     @Test
-    public void testRejectTask(){
+    public void testRejectTask() {
         final Integer approveStatus = workflowInvoker.rejectTask(TEST, "1", "1", "测试拒绝");
         MatcherAssert.assertThat(approveStatus, CoreMatchers.is(StatusEnum.REJECT.value()));
     }
 
     @Test
-    public void testStartAndExecuteFirstTask(){
+    public void testRejectToPreNode() {
+        final Integer approveStatus = workflowInvoker.rejectToPreNode(TEST, "1", "2", "测试拒绝");
+        MatcherAssert.assertThat(approveStatus, CoreMatchers.is(StatusEnum.START.value()));
+    }
+
+    @Test
+    public void testStartAndExecuteFirstTask() {
         ProcessStartDto processStartDto = new ProcessStartDto();
         processStartDto.setTenantId(2L);
         processStartDto.setProcessDefName(TEST);
@@ -82,7 +88,7 @@ public class SimpleTest {
      * 启动流程并指定下个任务的受理人
      */
     @Test
-    public void testStartAndAssignUser(){
+    public void testStartAndAssignUser() {
         {
             ProcessStartDto processStartDto = new ProcessStartDto();
             processStartDto.setTenantId(2L);
@@ -118,8 +124,8 @@ public class SimpleTest {
      * 测试非任务受理人去审核任务
      */
     @Test
-    public void testExecuteFail(){
-        Assertions.assertThrows(WorkflowException.class, ()->{
+    public void testExecuteFail() {
+        Assertions.assertThrows(WorkflowException.class, () -> {
             ExecuteTaskDto executeTaskDto = new ExecuteTaskDto();
             executeTaskDto.setProcessDefName(TEST);
             executeTaskDto.setBusinessId("1");
@@ -130,7 +136,7 @@ public class SimpleTest {
     }
 
     @Test
-    public void testCancelProcess(){
+    public void testCancelProcess() {
         final Integer approveStatus = workflowInvoker.cancelProcess(TEST, "1", "1");
         MatcherAssert.assertThat(approveStatus, CoreMatchers.is(StatusEnum.CANCEL.value()));
     }

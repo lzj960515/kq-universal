@@ -56,6 +56,7 @@ public final class IpGeoUtil {
             final String isp = geoJson.getStr("isp");
             return new IpGeoInfo(country, region, city, isp);
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             return null;
         }
 

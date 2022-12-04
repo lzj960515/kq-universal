@@ -16,10 +16,10 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class TransitionNode extends BaseNode {
 
-	@ApiModelProperty(value = "目标节点")
-	private String to;
+    @ApiModelProperty(value = "目标节点")
+    private String to;
 
-	@ApiModelProperty(value = "条件表达式")
-	private String expression;
+    @ApiModelProperty(value = "条件表达式")
+    private String expression;
 
 }

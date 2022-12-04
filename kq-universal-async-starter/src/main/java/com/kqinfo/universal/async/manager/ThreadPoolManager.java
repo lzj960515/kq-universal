@@ -23,18 +23,21 @@ public class ThreadPoolManager {
     }
 
     public static ExecutorService getExecutor(String threadName) {
-        if(RESOURCES_MANAGER.containsKey(threadName)){
-            return RESOURCES_MANAGER.get(threadName);
+        ExecutorService executorService = RESOURCES_MANAGER.get(threadName);
+        if(executorService != null){
+            return executorService;
         }
-        final int count = ThreadUtil.getSuitableThreadCount();
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(count, count, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>(200), new NameThreadFactory(threadName));
+
         synchronized (ThreadPoolManager.class) {
-            if (RESOURCES_MANAGER.containsKey(threadName)) {
-               return RESOURCES_MANAGER.get(threadName);
+            executorService = RESOURCES_MANAGER.get(threadName);
+            if(executorService != null){
+                return executorService;
             }
-            ThreadPoolManager.register(threadName, executor);
+            final int count = ThreadUtil.getSuitableThreadCount();
+            executorService = new ThreadPoolExecutor(count, count, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>(200), new NameThreadFactory(threadName));
+            ThreadPoolManager.register(threadName, executorService);
         }
-        return executor;
+        return executorService;
     }
 
     public static void register(String name, ExecutorService executor) {

@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kqinfo.universal.workflow.domain.Task;
 import com.kqinfo.universal.workflow.dto.TodoTaskDto;
-import com.kqinfo.universal.workflow.dto.TodoTaskPageParam;
 import com.kqinfo.universal.workflow.dto.TodoTaskPageDto;
+import com.kqinfo.universal.workflow.dto.TodoTaskPageParam;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -22,8 +22,9 @@ public interface TaskMapper extends BaseMapper<Task> {
 
     /**
      * 查询待办任务列表
-     * @param tenantId 租户id
-     * @param userId 用户id
+     *
+     * @param tenantId   租户id
+     * @param userId     用户id
      * @param processIds 流程定义id列表
      * @return 待办任务列表
      */
@@ -31,10 +32,11 @@ public interface TaskMapper extends BaseMapper<Task> {
 
     /**
      * 分页查询待办任务列表
-     * @param page 分页参数
-     * @param tenantId 租户id
-     * @param userId 用户id
-     * @param processIds 流程定义id列表
+     *
+     * @param page              分页参数
+     * @param tenantId          租户id
+     * @param userId            用户id
+     * @param processIds        流程定义id列表
      * @param todoTaskPageParam 分页参数
      * @return 待办任务列表
      */
@@ -42,7 +44,8 @@ public interface TaskMapper extends BaseMapper<Task> {
 
     /**
      * 查询该用户是否有任务
-     * @param userId 用户id
+     *
+     * @param userId     用户id
      * @param businessId 业务id
      * @param processIds 流程定义id列表
      * @return 是否有任务

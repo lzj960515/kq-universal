@@ -1,18 +1,15 @@
 package com.kqinfo.universal.workflow.test;
 
+import com.kqinfo.universal.workflow.constant.StatusEnum;
 import com.kqinfo.universal.workflow.core.WorkflowInvoker;
-import com.kqinfo.universal.workflow.dto.Assignee;
 import com.kqinfo.universal.workflow.dto.ExecuteTaskDto;
 import com.kqinfo.universal.workflow.dto.ProcessStartDto;
-import com.kqinfo.universal.workflow.exception.WorkflowException;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 
 /**
  * @author Zijian Liao
@@ -26,7 +23,7 @@ public class EventTest {
     private WorkflowInvoker workflowInvoker;
 
     @Test
-    public void testStart(){
+    public void testStart() {
         ProcessStartDto processStartDto = new ProcessStartDto();
         processStartDto.setTenantId(2L);
         processStartDto.setProcessDefName(EVENT);
@@ -38,7 +35,7 @@ public class EventTest {
     }
 
     @Test
-    public void testExecuteTask(){
+    public void testExecuteTask() {
         {
             ExecuteTaskDto executeTaskDto = new ExecuteTaskDto();
             executeTaskDto.setProcessDefName(EVENT);
@@ -46,8 +43,29 @@ public class EventTest {
             executeTaskDto.setOperator("1");
             executeTaskDto.setTenantId(2L);
             final Integer approveStatus = workflowInvoker.executeTask(executeTaskDto);
-            MatcherAssert.assertThat(approveStatus, CoreMatchers.is(2));
+            MatcherAssert.assertThat(approveStatus, CoreMatchers.is(StatusEnum.START.value()));
         }
+        {
+            ExecuteTaskDto executeTaskDto = new ExecuteTaskDto();
+            executeTaskDto.setProcessDefName(EVENT);
+            executeTaskDto.setBusinessId("1");
+            executeTaskDto.setOperator("1");
+            executeTaskDto.setTenantId(2L);
+            final Integer approveStatus = workflowInvoker.executeTask(executeTaskDto);
+            MatcherAssert.assertThat(approveStatus, CoreMatchers.is(StatusEnum.END.value()));
+        }
+    }
+
+    @Test
+    public void testRejectTask() {
+        final Integer approveStatus = workflowInvoker.rejectTask(EVENT, "1", "1", "测试拒绝");
+        MatcherAssert.assertThat(approveStatus, CoreMatchers.is(StatusEnum.REJECT.value()));
+    }
+
+    @Test
+    public void testRejectToPreNode() {
+        final Integer approveStatus = workflowInvoker.rejectToPreNode(EVENT, "1", "1", "测试拒绝");
+        MatcherAssert.assertThat(approveStatus, CoreMatchers.is(StatusEnum.START.value()));
     }
 
 }

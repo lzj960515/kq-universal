@@ -40,27 +40,27 @@ public abstract class BaseRestTest extends BaseTest {
         return BaseReqHandler.get(mockMvc, uri, headers, params, uriVars);
     }
 
-    protected JSONObject post(String uri, @Nullable Map<String, String> headers, Object body)  {
+    protected JSONObject post(String uri, @Nullable Map<String, String> headers, Object body) {
         return BaseReqHandler.post(mockMvc, uri, headers, body);
     }
 
-    protected JSONObject post(String uri, @Nullable Map<String, String> headers, Object body, @Nullable Object... uriVars)  {
+    protected JSONObject post(String uri, @Nullable Map<String, String> headers, Object body, @Nullable Object... uriVars) {
         return BaseReqHandler.post(mockMvc, uri, headers, body, uriVars);
     }
 
-    protected JSONObject put(String uri, @Nullable Map<String, String> headers, Object body)  {
+    protected JSONObject put(String uri, @Nullable Map<String, String> headers, Object body) {
         return BaseReqHandler.put(mockMvc, uri, headers, body);
     }
 
-    protected JSONObject put(String uri, @Nullable Map<String, String> headers, Object body, @Nullable Object... uriVars)  {
+    protected JSONObject put(String uri, @Nullable Map<String, String> headers, Object body, @Nullable Object... uriVars) {
         return BaseReqHandler.put(mockMvc, uri, headers, body, uriVars);
     }
 
-    protected JSONObject delete(String uri, @Nullable Map<String, String> headers, Object body)  {
+    protected JSONObject delete(String uri, @Nullable Map<String, String> headers, Object body) {
         return BaseReqHandler.delete(mockMvc, uri, headers, body);
     }
 
-    protected JSONObject delete(String uri, @Nullable Map<String, String> headers, Object body, @Nullable Object... uriVars)  {
+    protected JSONObject delete(String uri, @Nullable Map<String, String> headers, Object body, @Nullable Object... uriVars) {
         return BaseReqHandler.delete(mockMvc, uri, headers, body, uriVars);
     }
 }

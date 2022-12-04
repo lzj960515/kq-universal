@@ -17,8 +17,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class ProcessNode extends BaseNode {
 
-	private List<WorkNode> workNodes;
+    private List<WorkNode> workNodes;
 
-	private List<TaskNode> taskNodes;
+    private List<TaskNode> taskNodes;
 
 }

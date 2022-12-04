@@ -5,16 +5,15 @@ import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.kqinfo.universal.mybatis.properties.EncryptProperties;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 加解密工具
  * @author Zijian Liao
  * @since 1.0.0
  */
-@Component
 public class EncryptHandler implements InitializingBean {
 
     @Resource
@@ -32,6 +31,6 @@ public class EncryptHandler implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        aes = new SymmetricCrypto(SymmetricAlgorithm.AES, encryptProperties.getSecret().getBytes());
+        aes = new SymmetricCrypto(SymmetricAlgorithm.AES, encryptProperties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
 }

@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: dynamic-datasource
+  profiles:
+    active: mysql
+
+kq:
+  dynamic-datasource:
+    secret: 1234qwer4567asdf
+logging:
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG

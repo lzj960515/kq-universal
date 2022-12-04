@@ -32,4 +32,13 @@ public final class ThreadPool {
      */
     public static final ExecutorService DELAY_TASK_INVOKER = ThreadPoolManager.getExecutor("delay-task-invoker");
 
+    static {
+        ThreadUtil.addShutdownHook(() -> {
+            ThreadUtil.shutdownThreadPool(DELAY_TASK_QUERY);
+            ThreadUtil.shutdownThreadPool(DELAY_TASK_EXECUTOR);
+            ThreadUtil.shutdownThreadPool(DELAY_TASK_CLEANER);
+            ThreadUtil.shutdownThreadPool(DELAY_TASK_WORKER);
+            ThreadUtil.shutdownThreadPool(DELAY_TASK_INVOKER);
+        });
+    }
 }

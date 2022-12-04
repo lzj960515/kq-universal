@@ -3,6 +3,9 @@ package com.kqinfo.universal.stream.core;
 import com.kqinfo.universal.stream.annotation.StreamListener;
 import com.kqinfo.universal.stream.util.Group;
 import com.kqinfo.universal.stream.util.MessageHandler;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -11,6 +14,7 @@ import org.springframework.data.redis.connection.stream.ObjectRecord;
 import org.springframework.data.redis.connection.stream.ReadOffset;
 import org.springframework.data.redis.connection.stream.StreamOffset;
 import org.springframework.data.redis.stream.StreamMessageListenerContainer;
+import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.Method;
@@ -35,7 +39,7 @@ public class RedisStreamListenerContext extends StreamListenerContext {
 
     @Override
     <T> void doRegisterConsumer(StreamListener streamListener, Object bean, Method method, Class<T> type) {
-        String queue = streamListener.queue();
+        String queue = super.findQueue(streamListener.queue());
         String group = streamListener.group();
         String consumer = streamListener.consumer();
 

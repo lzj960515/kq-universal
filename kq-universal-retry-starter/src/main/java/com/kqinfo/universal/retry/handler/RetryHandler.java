@@ -6,6 +6,7 @@ import com.kqinfo.universal.retry.domain.RetryRecord;
 import com.kqinfo.universal.retry.service.RetryAlarmService;
 import com.kqinfo.universal.retry.service.RetryRecordService;
 import com.kqinfo.universal.retry.util.SpringUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
@@ -19,6 +20,7 @@ import java.util.List;
  * @author Zijian Liao
  * @since 1.12.0
  */
+@Slf4j
 public class RetryHandler {
 
     @Resource
@@ -48,6 +50,7 @@ public class RetryHandler {
             doRetry(retryRecord);
             retryRecordService.updateRecordSuccess(retryRecord.getId());
         }catch (InvocationTargetException e){
+            log.error(e.getMessage(), e);
             final Throwable targetException = e.getTargetException();
             handleFail(retryRecord, targetException);
         }catch (Throwable e){

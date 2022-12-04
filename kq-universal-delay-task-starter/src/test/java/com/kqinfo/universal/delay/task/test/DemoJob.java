@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 用于测试的类
@@ -37,8 +39,13 @@ public class DemoJob {
         DelayTaskHelper.handleSuccess();
     }
 
+    private static Set<String> task = new HashSet<>(100);
+
     @DelayTask(name = "demoJob2")
     public void job2(String info) throws InterruptedException {
+        if (!task.add(info)) {
+            System.err.println("延时任务「job2」被重复调用了, id:"  + info);
+        }
         log.info("延迟任务「job2」被调用了, id:{} 当前时间：{}", info, LocalDateTime.now());
         Thread.sleep(6000L);
         log.info("延迟任务「job2」执行完毕, id:{} 当前时间：{}", info, LocalDateTime.now());

@@ -7,7 +7,6 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Signature;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -19,7 +18,6 @@ import java.util.List;
  * @author Zijian Liao
  * @since 1.0.0
  */
-@Component
 @Intercepts({@Signature(
         type = ResultSetHandler.class,
         method = "handleResultSets",

@@ -17,7 +17,6 @@
 package com.kqinfo.universal.async.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
@@ -30,20 +29,9 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public final class ThreadUtil {
-    
-    /**
-     * Wait.
-     *
-     * @param object load object
-     */
-    public static void objectWait(Object object) {
-        try {
-            object.wait();
-        } catch (InterruptedException ignore) {
-            Thread.interrupted();
-        }
-    }
-    
+
+    private static final int THREAD_MULTIPLE = 2;
+
     /**
      * Sleep.
      *
@@ -60,34 +48,6 @@ public final class ThreadUtil {
     public static void countDown(CountDownLatch latch) {
         Objects.requireNonNull(latch, "latch");
         latch.countDown();
-    }
-    
-    /**
-     * Await count down latch.
-     *
-     * @param latch count down latch
-     */
-    public static void latchAwait(CountDownLatch latch) {
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-    
-    /**
-     * Await count down latch with timeout.
-     *
-     * @param latch count down latch
-     * @param time  timeout time
-     * @param unit  time unit
-     */
-    public static void latchAwait(CountDownLatch latch, long time, TimeUnit unit) {
-        try {
-            latch.await(time, unit);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
     
     /**
@@ -131,7 +91,7 @@ public final class ThreadUtil {
                 }
             } catch (InterruptedException e) {
                 executor.shutdownNow();
-                Thread.interrupted();
+                Thread.currentThread().interrupt();
             } catch (Throwable ex) {
                 log.error("ThreadPoolManager shutdown executor has error", ex);
             }
@@ -142,7 +102,5 @@ public final class ThreadUtil {
     public static void addShutdownHook(Runnable runnable) {
         Runtime.getRuntime().addShutdownHook(new Thread(runnable));
     }
-    
-    private static final int THREAD_MULTIPLE = 2;
-    
+
 }

@@ -13,7 +13,7 @@ public class PageResult<T> {
     /**
      * 结果集
      */
-    List<T> list;
+    private List<T> list;
     /**
      * 当前页
      */

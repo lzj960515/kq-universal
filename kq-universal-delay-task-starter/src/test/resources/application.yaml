@@ -5,6 +5,7 @@ spring:
     name: delay-task
   profiles:
     active: h2
-
-delay-task:
-  task-retention-days: 30
+kq:
+  delay-task:
+    task-retention-days: 30
+    concurrency: 200

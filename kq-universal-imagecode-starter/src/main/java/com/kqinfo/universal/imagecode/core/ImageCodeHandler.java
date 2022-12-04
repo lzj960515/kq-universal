@@ -6,12 +6,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.lang.NonNull;
 
 import javax.annotation.Resource;
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,7 +32,7 @@ public class ImageCodeHandler {
     public boolean checkCode(@NonNull String key, @NonNull String code){
         String cacheCode = stringRedisTemplate.opsForValue().get(key);
         if(cacheCode != null){
-            return code.equals(cacheCode);
+            return code.toLowerCase().equals(cacheCode);
         }
         return false;
     }

@@ -25,30 +25,30 @@ import java.time.LocalDateTime;
 @ApiModel(value = "Process对象", description = "流程定义")
 public class Process implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.ASSIGN_ID)
-	private Long id;
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    private Long id;
 
-	@ApiModelProperty(value = "流程定义名称")
-	private String name;
+    @ApiModelProperty(value = "流程定义名称")
+    private String name;
 
-	@ApiModelProperty(value = "流程定义描述")
-	private String description;
+    @ApiModelProperty(value = "流程定义描述")
+    private String description;
 
-	@ApiModelProperty(value = "流程定义的内容")
-	private String context;
+    @ApiModelProperty(value = "流程定义的内容")
+    private String context;
 
-	@ApiModelProperty(value = "流程定义的版本，每次创建同名称的流程定义，版本+1")
-	private Integer version;
+    @ApiModelProperty(value = "流程定义的版本，每次创建同名称的流程定义，版本+1")
+    private Integer version;
 
-	@ApiModelProperty(value = "签名")
-	private String sign;
+    @ApiModelProperty(value = "签名")
+    private String sign;
 
-	@TableField(value = "create_time", fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
-	@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime updateTime;
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
 }

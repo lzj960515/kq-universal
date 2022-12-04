@@ -62,12 +62,12 @@ public class KqEnumScannerRegistrar implements ImportBeanDefinitionRegistrar {
         final Field field = ReflectionUtils.findField(enumClass, DefaultEnum.CODE);
         if (field != null) {
             //开启能获取私有属性的权限
-            field.setAccessible(true);
+            ReflectionUtils.makeAccessible(field);
             return field;
         }
         for (Field f : enumClass.getDeclaredFields()) {
             if (f.isAnnotationPresent(KqCode.class)) {
-                f.setAccessible(true);
+                ReflectionUtils.makeAccessible(f);
                 return f;
             }
         }
@@ -78,12 +78,12 @@ public class KqEnumScannerRegistrar implements ImportBeanDefinitionRegistrar {
         final Field field = ReflectionUtils.findField(enumClass, DefaultEnum.DESC);
         if (field != null) {
             //开启能获取私有属性的权限
-            field.setAccessible(true);
+            ReflectionUtils.makeAccessible(field);
             return field;
         }
         for (Field f : enumClass.getDeclaredFields()) {
             if (f.isAnnotationPresent(KqDesc.class)) {
-                f.setAccessible(true);
+                ReflectionUtils.makeAccessible(f);
                 return f;
             }
         }

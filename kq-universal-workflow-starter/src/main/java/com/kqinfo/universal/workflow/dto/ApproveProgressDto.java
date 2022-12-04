@@ -23,4 +23,7 @@ public class ApproveProgressDto implements Serializable {
 
     @ApiModelProperty("审核完成 1.是 0.否")
     private Integer approved;
+
+    @ApiModelProperty("审核人")
+    private String operator;
 }

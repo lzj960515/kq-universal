@@ -40,7 +40,7 @@ public class BusinessExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public BaseResult<Void> handlerException(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
-        String message = bindingResult.getFieldErrors().stream().map(field -> field.getField() +  field.getDefaultMessage()).distinct()
+        String message = bindingResult.getFieldErrors().stream().map(field -> field.getField() + field.getDefaultMessage()).distinct()
                 .collect(Collectors.joining(","));
         return BaseResult.failure(HttpStatus.BAD_REQUEST.value(), message);
     }
@@ -63,7 +63,7 @@ public class BusinessExceptionHandler {
     @ExceptionHandler(Exception.class)
     public BaseResult<Void> handlerException(Exception ex) {
         log.error("运行时异常：", ex);
-        if("online".equals(env)){
+        if ("online".equals(env)) {
             return BaseResult.failure();
         }
         return BaseResult.failure(ex.getMessage());

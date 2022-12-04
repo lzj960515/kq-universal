@@ -14,16 +14,16 @@ import java.util.List;
 @Component
 public class StartHandler extends NodeHandler {
 
-	@Override
-	public void execute(WorkNode workNode, Execution execution) {
-		// 找到下个节点, 直接执行
-		final List<TransitionNode> transitionNodes = workNode.getTransitionNodes();
-		for (TransitionNode transitionNode : transitionNodes) {
-			final WorkNode node = workflowHandler.getNode(transitionNode.getTo(), execution.getWorkNodes());
-			workflowHandler.execute(node, execution);
-		}
-		// 开始流程时执行相应的事件
-		workflowListenerExecutor.execute(workNode.getEvent(), execution.getProcessInstance().getBusinessId());
-	}
+    @Override
+    public void execute(WorkNode workNode, Execution execution) {
+        // 找到下个节点, 直接执行
+        final List<TransitionNode> transitionNodes = workNode.getTransitions();
+        for (TransitionNode transitionNode : transitionNodes) {
+            final WorkNode node = workflowHandler.getNode(transitionNode.getTo(), execution.getWorkNodes());
+            workflowHandler.execute(node, execution);
+        }
+        // 开始流程时执行相应的事件
+        workflowListenerExecutor.execute(workNode.getEvent(), execution.getProcessInstance().getBusinessId());
+    }
 
 }

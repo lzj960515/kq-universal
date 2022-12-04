@@ -145,9 +145,11 @@ public class SingleDelayTaskTest {
 ```yaml
 delay-task:
   task-retention-days: 30
+  concurrency: 100
 ```
 
-> 保留任务天数，30表示只保留30天内的任务记录，如果不配置或者配置为-1则永不清理
+> task-retention-days 保留任务天数，30表示只保留30天内的任务记录，如果不配置或者配置为-1则永不清理
+> concurrency 5秒内调用的任务数，用于控制实际业务中在5秒内可处理的任务数
 
 
 

@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 
 /**
  * 请假流程测试，支持分叉
+ *
  * @author Zijian Liao
  * @since 2.4.0
  */
@@ -25,7 +26,7 @@ public class LeaveTest {
     private WorkflowInvoker workflowInvoker;
 
     @Test
-    public void testStart(){
+    public void testStart() {
         ProcessStartDto processStartDto = new ProcessStartDto();
         processStartDto.setTenantId(2L);
         processStartDto.setProcessDefName(LEAVE);
@@ -41,14 +42,14 @@ public class LeaveTest {
      * 大于等于2天流程到部门审批
      */
     @Test
-    public void testExecuteTask(){
+    public void testExecuteTask() {
         ExecuteTaskDto executeTaskDto = new ExecuteTaskDto();
         executeTaskDto.setProcessDefName(LEAVE);
         executeTaskDto.setBusinessId("2");
         executeTaskDto.setOperator("1");
         executeTaskDto.setTenantId(2L);
         executeTaskDto.setReason("准予请假");
-        final Integer approveStatus =  workflowInvoker.executeTask(executeTaskDto);
+        final Integer approveStatus = workflowInvoker.executeTask(executeTaskDto);
         MatcherAssert.assertThat(approveStatus, CoreMatchers.is(2));
     }
 

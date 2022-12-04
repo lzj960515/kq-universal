@@ -15,6 +15,10 @@
 ## [枚举组件](kq-universal-enum-starter)
 ## [CommonDao](kq-universal-comdao-starter)
 ## [ip](kq-universal-ip-starter)
+## [缓存组件](kq-universal-cache-starter)
+## [动态数据源组件](kq-universal-dynamic-datasource-starter)
+## [excel组件](kq-universal-excel-starter)
+## [yapi组件](kq-universal-yapi-starter)
 ## 使用方式
 
 使用该组件作为父工程或者单独使用其中的某个组件

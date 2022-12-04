@@ -1,5 +1,6 @@
 package com.kqinfo.universal.delay.task.dao;
 
+import com.kqinfo.universal.delay.task.config.DelayTaskProperties;
 import com.kqinfo.universal.delay.task.core.domain.DelayTaskInfo;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -8,13 +9,13 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Zijian Liao
@@ -24,14 +25,14 @@ import java.util.List;
 public class DelayTaskDao {
 
     private static final String INSERT_SQL = "INSERT INTO `delay_task` (`name`, `description`, `info`, `execute_time`, `execute_status`, `execute_message`, `real_execute_time`, `create_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String FIND_SQL = "SELECT `id`, `name`, `info`, `execute_time` from `delay_task` where id = ?";
-    private static final String FIND_BY_EXECUTE_TIME_SQL = "select `id`, `name`, `info`, `execute_time` from delay_task where execute_time <= ? and execute_status = 1";
+    private static final String FIND_SQL = "SELECT `id`, `name`, `info`, `execute_time`, `execute_status` from `delay_task` where id = ?";
+    private static final String FIND_BY_EXECUTE_TIME_SQL = "select `id`, `name`, `info`, `execute_time`, `execute_status` from delay_task where execute_time <= ? and execute_status = 1 limit ?";
     private static final String DELETE_BY_EXECUTE_TIME_SQL = "delete from delay_task where execute_status = 3 and execute_time <= ?";
     private static final String UPDATE_STATUS_SQL = "update delay_task set real_execute_time = ?, execute_status = ?, execute_message = ? where  id = ?";
     private final RowMapper<DelayTaskInfo> rowMapper = new DelayTaskInfoRowMapper();
 
-
-
+    @Resource
+    private DelayTaskProperties delayTaskProperties;
     @Resource
     private JdbcTemplate jdbcTemplate;
 
@@ -49,7 +50,7 @@ public class DelayTaskDao {
             ps.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
             return ps;
         }, keyHolder);
-        long id = keyHolder.getKey().longValue();
+        long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
         delayTaskInfo.setId(id);
     }
 
@@ -58,7 +59,7 @@ public class DelayTaskDao {
     }
 
     public List<DelayTaskInfo> findByExecuteTime(Long executeTime){
-        return jdbcTemplate.query(FIND_BY_EXECUTE_TIME_SQL, rowMapper, executeTime);
+        return jdbcTemplate.query(FIND_BY_EXECUTE_TIME_SQL, rowMapper, executeTime, delayTaskProperties.getConcurrency());
     }
 
     public void deleteByExecuteTime(Long executeTime){
@@ -78,7 +79,8 @@ public class DelayTaskDao {
             final String name = rs.getString(2);
             final String info = rs.getString(3);
             final Long executeTime = rs.getLong(4);
-            return new DelayTaskInfo(id, name, info, executeTime);
+            final Integer executeStatus = rs.getInt(5);
+            return new DelayTaskInfo(id, name, info, executeTime, executeStatus);
         }
     }
 

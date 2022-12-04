@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class EndNodeParser extends NodeParser {
 
-	@Override
-	protected WorkNode newNode() {
-		return new EndNode();
-	}
+    @Override
+    protected WorkNode newNode() {
+        return new EndNode();
+    }
 
-	@Override
-	protected void parse(JSONObject nodeJson, WorkNode workNode) {
+    @Override
+    protected void parse(JSONObject nodeJson, WorkNode workNode) {
 
-	}
+    }
 
 }

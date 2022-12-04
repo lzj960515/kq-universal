@@ -2,8 +2,6 @@ package com.kqinfo.universal.delay.task.core;
 
 import com.kqinfo.universal.delay.task.dao.DelayTaskDao;
 import com.kqinfo.universal.delay.task.thread.ThreadPool;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -12,8 +10,6 @@ import java.util.List;
  * @since 1.0.0
  */
 public class DelayTaskRunner implements Runnable {
-
-    private static final Logger log = LoggerFactory.getLogger(DelayTaskRunner.class);
 
     private final DelayTaskDao delayTaskDao;
     private final List<Long> taskIds;

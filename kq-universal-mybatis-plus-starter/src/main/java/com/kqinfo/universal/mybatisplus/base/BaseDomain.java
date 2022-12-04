@@ -20,23 +20,22 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public abstract class BaseDomain implements Serializable {
 
-	private static final long serialVersionUID = -1239542174707898422L;
+    private static final long serialVersionUID = 6791252382901941334L;
+    /**
+     * 主键
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
-	/**
-	 * 主键
-	 */
-	@TableId(value = "id", type = IdType.AUTO)
-	private Long id;
+    /**
+     * 创建时间
+     */
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
-	/**
-	 * 创建时间
-	 */
-	@TableField(value = "create_time", fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
-
-	/**
-	 * 修改时间
-	 */
-	@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime updateTime;
+    /**
+     * 修改时间
+     */
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 }

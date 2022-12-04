@@ -16,6 +16,7 @@ public interface HistoryTaskService extends IService<HistoryTask> {
 
     /**
      * 查询审核日志
+     *
      * @param businessId 业务id
      * @param processIds 流程定义id列表
      * @return 审核日志
@@ -24,6 +25,7 @@ public interface HistoryTaskService extends IService<HistoryTask> {
 
     /**
      * 查询历史任务列表
+     *
      * @param instanceId 流程实例id
      * @return 历史任务列表
      */
@@ -31,6 +33,7 @@ public interface HistoryTaskService extends IService<HistoryTask> {
 
     /**
      * 查询最后一轮完成的任务
+     *
      * @param businessId 业务id
      * @param processIds 流程定义id列表
      * @return 最后一个完成的任务

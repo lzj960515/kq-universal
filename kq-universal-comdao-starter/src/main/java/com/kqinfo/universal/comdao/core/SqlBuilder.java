@@ -13,7 +13,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,15 +25,18 @@ import java.util.stream.Stream;
 @Slf4j
 public class SqlBuilder {
 
-    static final String DOWN_COMMA = ", ";
+    private static final String DOWN_COMMA = ", ";
 
-    static final String UP_COMMA = "`";
+    public static final char UP_COMMA = '`';
 
-    static final String AND = "AND ";
+    private static final String AND = "AND ";
 
-    static final String SQL_ITEM = "sqlItem.";
+    private static final String SQL_ITEM = "sqlItem.";
 
-    static final String ID = "id";
+    private static final String ID = "id";
+
+    private static final String ORDER_BY = "ORDER BY";
+    private static final String LIMIT = "LIMIT";
 
     /**
      * 插入的通用SQL
@@ -64,9 +69,9 @@ public class SqlBuilder {
         }, field -> !field.isAnnotationPresent(Transient.class));
         TableName tableName = cls.getAnnotation(TableName.class);
         StringBuilder sql = new StringBuilder(" INSERT INTO ").append(tableName.value());
-        sql.append("(").append(col, 0, col.lastIndexOf(DOWN_COMMA)).append(") ");
+        sql.append('(').append(col, 0, col.lastIndexOf(DOWN_COMMA)).append(") ");
         sql.append(" VALUES ");
-        sql.append("(").append(val, 0, val.lastIndexOf(DOWN_COMMA)).append(") ");
+        sql.append('(').append(val, 0, val.lastIndexOf(DOWN_COMMA)).append(") ");
         return sql.toString();
     }
 
@@ -94,10 +99,10 @@ public class SqlBuilder {
 
 
         StringBuilder sql = new StringBuilder(" INSERT INTO ").append(t.value());
-        sql.append("(").append(col.substring(0, col.lastIndexOf(DOWN_COMMA))).append(") ");
+        sql.append('(').append(col.substring(0, col.lastIndexOf(DOWN_COMMA))).append(") ");
         sql.append(" VALUES \n");
         StringBuilder tmp = new StringBuilder();
-        tmp.append("(").append(val.substring(0, val.lastIndexOf(DOWN_COMMA))).append(") ");
+        tmp.append('(').append(val.substring(0, val.lastIndexOf(DOWN_COMMA))).append(") ");
 
         for (int i = 0; i < list.size(); i++) {
             sql.append(tmp.toString().replace(SQL_ITEM, "list[" + i + "]."));
@@ -201,7 +206,7 @@ public class SqlBuilder {
 
         String str = selectList(params);
         if (fieldNames != null && fieldNames.length > 0) {
-            Map<String, String> fieldMap = Stream.of(fieldNames).collect(Collectors.toMap(name -> name, name -> name));
+            Set<String> fieldMap = Stream.of(fieldNames).collect(Collectors.toSet());
             //在字段列表里的字段和没在字段列表里的字段，核心工作是验证代入字段的有效性
             List<String> inList = new ArrayList<>();
             List<String> outList = new ArrayList<>();
@@ -209,7 +214,7 @@ public class SqlBuilder {
             ReflectionUtils.doWithFields(params.getClass(), field -> {
                 // 找出filedNames中的field
                 String fieldName = tableFiled(field);
-                if (fieldMap.containsKey(fieldName)) {
+                if (fieldMap.contains(fieldName)) {
                     inList.add(fieldName);
                 }else {
                     outList.add(fieldName);
@@ -290,7 +295,7 @@ public class SqlBuilder {
         TableName t = cls.getAnnotation(TableName.class);
 
         String where = whereKey(cls, true);
-        where = where.substring(0, where.indexOf("="));
+        where = where.substring(0, where.indexOf('='));
 
         StringBuilder sql = new StringBuilder();
         sql.append(" DELETE FROM ").append(t.value()).append(where).append(" in ");
@@ -302,7 +307,7 @@ public class SqlBuilder {
                 if (Integer.class == id.getClass() || Long.class == id.getClass()) {
                     colVal.append(id).append(DOWN_COMMA);
                 } else if (String.class == id.getClass()) {
-                    colVal.append("'").append(id).append("'").append(DOWN_COMMA);
+                    colVal.append('\'').append(id).append('\'').append(DOWN_COMMA);
                 }
             }
             sql.append(colVal);
@@ -314,9 +319,6 @@ public class SqlBuilder {
         sql.append(" ) ");
         return sql.toString();
     }
-
-    static final String ORDER_BY = "ORDER BY";
-    static final String LIMIT = "LIMIT";
 
 
     /**

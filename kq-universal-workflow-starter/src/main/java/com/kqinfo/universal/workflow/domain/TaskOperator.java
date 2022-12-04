@@ -25,24 +25,24 @@ import java.time.LocalDateTime;
 @ApiModel(value = "TaskOperator对象", description = "任务处理人关系")
 public class TaskOperator implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.ASSIGN_ID)
-	private Long id;
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    private Long id;
 
-	@ApiModelProperty(value = "任务id")
-	private Long taskId;
+    @ApiModelProperty(value = "任务id")
+    private Long taskId;
 
-	@ApiModelProperty(value = "任务处理人id")
-	private String operatorId;
+    @ApiModelProperty(value = "任务处理人id")
+    private String operatorId;
 
-	@ApiModelProperty(value = "任务处理人")
-	private String operatorName;
+    @ApiModelProperty(value = "任务处理人")
+    private String operatorName;
 
-	@TableField(value = "create_time", fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
-	@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime updateTime;
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
 }

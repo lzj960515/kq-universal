@@ -5,3 +5,5 @@ spring:
     password: 123456
 server:
   port: 8081
+
+queue-name: user

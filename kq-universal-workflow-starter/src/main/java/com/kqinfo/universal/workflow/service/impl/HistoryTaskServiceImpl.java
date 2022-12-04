@@ -21,42 +21,42 @@ import java.util.stream.Collectors;
  */
 @Service
 public class HistoryTaskServiceImpl extends ServiceImpl<HistoryTaskMapper, HistoryTask>
-		implements HistoryTaskService {
+        implements HistoryTaskService {
 
-	@Override
-	public List<TaskLogDto> listTaskLog(String businessId, List<Long> processIds) {
-		LambdaQueryWrapper<HistoryTask> wrapper = Wrappers.lambdaQuery();
-		wrapper.eq(HistoryTask::getBusinessId, businessId)
-				.in(HistoryTask::getProcessId, processIds)
-				.orderByDesc(HistoryTask::getCreateTime);
-		final List<HistoryTask> list = super.list(wrapper);
-		return list.stream().map(task -> new TaskLogDto()
-				.setOperatorId(task.getOperatorId())
-				.setOperator(task.getOperatorName())
-				.setReason(task.getReason())
-				.setTaskName(task.getName())
-				.setStatus(task.getStatus())
-				.setCreateTime(task.getCreateTime())).collect(Collectors.toList());
-	}
+    @Override
+    public List<TaskLogDto> listTaskLog(String businessId, List<Long> processIds) {
+        LambdaQueryWrapper<HistoryTask> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(HistoryTask::getBusinessId, businessId)
+                .in(HistoryTask::getProcessId, processIds)
+                .orderByDesc(HistoryTask::getCreateTime);
+        final List<HistoryTask> list = super.list(wrapper);
+        return list.stream().map(task -> new TaskLogDto()
+                .setOperatorId(task.getOperatorId())
+                .setOperator(task.getOperatorName())
+                .setReason(task.getReason())
+                .setTaskName(task.getName())
+                .setStatus(task.getStatus())
+                .setCreateTime(task.getCreateTime())).collect(Collectors.toList());
+    }
 
-	@Override
-	public List<HistoryTask> listByInstanceId(Long instanceId) {
-		LambdaQueryWrapper<HistoryTask> wrapper = Wrappers.lambdaQuery();
-		wrapper.eq(HistoryTask::getInstanceId, instanceId);
-		return super.list(wrapper);
-	}
+    @Override
+    public List<HistoryTask> listByInstanceId(Long instanceId) {
+        LambdaQueryWrapper<HistoryTask> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(HistoryTask::getInstanceId, instanceId);
+        return super.list(wrapper);
+    }
 
-	@Override
-	public List<HistoryTask> getLastTasks(String businessId, List<Long> processIds) {
-		LambdaQueryWrapper<HistoryTask> wrapper = Wrappers.lambdaQuery();
-		wrapper.eq(HistoryTask::getBusinessId, businessId)
-				.in(HistoryTask::getProcessId, processIds)
-				.orderByDesc(HistoryTask::getCreateTime);
-		final List<HistoryTask> list = super.list(wrapper);
-		if (list.isEmpty()) {
-			throw new WorkflowException("该业务数据还未被审核过，无法展示审核进度，请先编辑资料审核后再试");
-		}
-		final HistoryTask historyTask = list.get(0);
-		return listByInstanceId(historyTask.getInstanceId());
-	}
+    @Override
+    public List<HistoryTask> getLastTasks(String businessId, List<Long> processIds) {
+        LambdaQueryWrapper<HistoryTask> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(HistoryTask::getBusinessId, businessId)
+                .in(HistoryTask::getProcessId, processIds)
+                .orderByDesc(HistoryTask::getCreateTime);
+        final List<HistoryTask> list = super.list(wrapper);
+        if (list.isEmpty()) {
+            throw new WorkflowException("该业务数据还未被审核过，无法展示审核进度，请先编辑资料审核后再试");
+        }
+        final HistoryTask historyTask = list.get(0);
+        return listByInstanceId(historyTask.getInstanceId());
+    }
 }

@@ -34,50 +34,50 @@ import java.util.List;
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerConfiguration {
 
-	@Autowired
-	private SwaggerProperties swaggerProperties;
+    @Autowired
+    private SwaggerProperties swaggerProperties;
 
-	private static final String HEAD_KEY = "Authorization";
+    private static final String HEAD_KEY = "Authorization";
 
-	@Bean
-	public Docket createRestApi() {
-		return new Docket(DocumentationType.SWAGGER_2).enable(true).apiInfo(apiInfo()).select()
-				.apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage())).paths(PathSelectors.any()).build()
-				.securitySchemes(securitySchemes()).securityContexts(securityContexts());
-	}
+    @Bean
+    public Docket createRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2).enable(true).apiInfo(apiInfo()).select()
+                .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage())).paths(PathSelectors.any()).build()
+                .securitySchemes(securitySchemes()).securityContexts(securityContexts());
+    }
 
-	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title(swaggerProperties.getTitle()).description(swaggerProperties.getDescription())
-				.contact(new Contact("dev", null, "?@cqkqinfo.com")).version("1.0.0").build();
-	}
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder().title(swaggerProperties.getTitle()).description(swaggerProperties.getDescription())
+                .contact(new Contact("dev", null, "?@cqkqinfo.com")).version("1.0.0").build();
+    }
 
-	private List<ApiKey> securitySchemes() {
-		// 设置请求头信息
-		List<ApiKey> result = new ArrayList<>();
-		ApiKey apiKey = new ApiKey(HEAD_KEY, HEAD_KEY, "header");
-		result.add(apiKey);
-		return result;
-	}
+    private List<ApiKey> securitySchemes() {
+        // 设置请求头信息
+        List<ApiKey> result = new ArrayList<>();
+        ApiKey apiKey = new ApiKey(HEAD_KEY, HEAD_KEY, "header");
+        result.add(apiKey);
+        return result;
+    }
 
-	private List<SecurityContext> securityContexts() {
-		// 设置需要登录认证的路径
-		List<SecurityContext> result = new ArrayList<>();
-		result.add(getContextByPath("/*.*"));
-		return result;
-	}
+    private List<SecurityContext> securityContexts() {
+        // 设置需要登录认证的路径
+        List<SecurityContext> result = new ArrayList<>();
+        result.add(getContextByPath("/*.*"));
+        return result;
+    }
 
-	private SecurityContext getContextByPath(String pathRegex) {
-		return SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex(pathRegex))
-				.build();
-	}
+    private SecurityContext getContextByPath(String pathRegex) {
+        return SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex(pathRegex))
+                .build();
+    }
 
-	private List<SecurityReference> defaultAuth() {
-		List<SecurityReference> result = new ArrayList<>();
-		AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-		authorizationScopes[0] = authorizationScope;
-		result.add(new SecurityReference(HEAD_KEY, authorizationScopes));
-		return result;
-	}
+    private List<SecurityReference> defaultAuth() {
+        List<SecurityReference> result = new ArrayList<>();
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        result.add(new SecurityReference(HEAD_KEY, authorizationScopes));
+        return result;
+    }
 
 }

@@ -23,10 +23,11 @@ public class ImageCodeProperties {
     /**
      * 验证码字符个数
      */
-    private int codeCount = 5;
+    private int codeCount = 4;
     /**
      * 验证码干扰线数
      */
+    @Deprecated
     private int lineCount = 100;
     /**
      * 验证码过期时间

@@ -18,11 +18,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class WorkNode extends BaseNode {
 
-	private List<TransitionNode> transitionNodes;
+    private List<TransitionNode> transitions;
 
-	/**
-	 * @see com.kqinfo.universal.workflow.core.WorkflowEvent
-	 */
-	@ApiModelProperty("事件名称")
-	private String event;
+    /**
+     * @see com.kqinfo.universal.workflow.core.WorkflowEvent
+     */
+    @ApiModelProperty("事件名称")
+    private String event;
 }

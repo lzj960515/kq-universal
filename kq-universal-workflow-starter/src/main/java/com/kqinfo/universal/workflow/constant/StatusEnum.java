@@ -8,31 +8,31 @@ package com.kqinfo.universal.workflow.constant;
  */
 public enum StatusEnum {
 
-	/**
-	 * 审核中
-	 */
-	START(1),
-	/**
-	 * 审核通过
-	 */
-	END(2),
-	/**
-	 * 驳回
-	 */
-	REJECT(3),
-	/**
-	 * 取消审核
-	 */
-	CANCEL(4);
+    /**
+     * 审核中
+     */
+    START(1),
+    /**
+     * 审核通过
+     */
+    END(2),
+    /**
+     * 驳回
+     */
+    REJECT(3),
+    /**
+     * 取消审核
+     */
+    CANCEL(4);
 
-	private final Integer value;
+    private final Integer value;
 
-	StatusEnum(Integer value) {
-		this.value = value;
-	}
+    StatusEnum(Integer value) {
+        this.value = value;
+    }
 
-	public Integer value() {
-		return this.value;
-	}
+    public Integer value() {
+        return this.value;
+    }
 
 }

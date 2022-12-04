@@ -4,8 +4,6 @@ import com.kqinfo.universal.redis.properties.KqRedisProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -57,10 +55,10 @@ public class RedisUtil {
             if (time > 0) {
                 redisTemplate.expire(wrapKey(key), time, unit);
             }
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -85,7 +83,7 @@ public class RedisUtil {
             return redisTemplate.hasKey(wrapKey(key));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -126,10 +124,10 @@ public class RedisUtil {
     public static Boolean set(String key, Object value) {
         try {
             redisTemplate.opsForValue().set(wrapKey(key), value);
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -161,10 +159,10 @@ public class RedisUtil {
             } else {
                 set(key, value);
             }
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -182,7 +180,7 @@ public class RedisUtil {
             return redisTemplate.opsForValue().setIfAbsent(wrapKey(key), value, time, unit);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -276,10 +274,10 @@ public class RedisUtil {
     public static Boolean hmset(String key, Map<String, Object> map) {
         try {
             redisTemplate.opsForHash().putAll(wrapKey(key), map);
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -297,10 +295,10 @@ public class RedisUtil {
             if (time > 0) {
                 expire(key, time);
             }
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -315,10 +313,10 @@ public class RedisUtil {
     public static Boolean hset(String key, String item, Object value) {
         try {
             redisTemplate.opsForHash().put(wrapKey(key), item, value);
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -337,10 +335,10 @@ public class RedisUtil {
             if (time > 0) {
                 expire(key, time);
             }
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -405,6 +403,21 @@ public class RedisUtil {
     }
 
     /**
+     * 根据 key获取 Set中的所有值
+     *
+     * @param key 键
+     * @return Set
+     */
+    public static <T> Set<T> sGet(String key, Class<T> type) {
+        try {
+            return (Set<T>) redisTemplate.opsForSet().members(wrapKey(key));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return null;
+        }
+    }
+
+    /**
      * 根据value从一个set中查询,是否存在
      *
      * @param key   键
@@ -416,7 +429,7 @@ public class RedisUtil {
             return redisTemplate.opsForSet().isMember(wrapKey(key), value);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -546,10 +559,10 @@ public class RedisUtil {
     public static Boolean lSet(String key, Object value) {
         try {
             redisTemplate.opsForList().rightPush(wrapKey(key), value);
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -567,10 +580,10 @@ public class RedisUtil {
             if (time > 0) {
                 expire(key, time);
             }
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -584,10 +597,10 @@ public class RedisUtil {
     public static Boolean lSet(String key, List<Object> value) {
         try {
             redisTemplate.opsForList().rightPushAll(wrapKey(key), value);
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -605,10 +618,10 @@ public class RedisUtil {
             if (time > 0) {
                 expire(key, time);
             }
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -623,10 +636,10 @@ public class RedisUtil {
     public static Boolean lUpdateIndex(String key, Long index, Object value) {
         try {
             redisTemplate.opsForList().set(wrapKey(key), index, value);
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -648,9 +661,6 @@ public class RedisUtil {
     }
 
     private static String wrapKey(String key) {
-        if(StringUtils.hasText(redisProperties.getPrefix())){
-            return redisProperties.getPrefix().concat(key);
-        }
-        return key;
+        return redisProperties.getPrefix().concat(key);
     }
 }
