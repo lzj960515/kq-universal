@@ -21,7 +21,7 @@
    <dependency>
      <groupId>com.github.lzj960515</groupId>
      <artifactId>kq-universal-redis-starter</artifactId>
-     <version>1.2.0</version>
+     <version>1.0.1</version>
    </dependency>
    ```
 
@@ -248,5 +248,9 @@ public @interface RedisLock {
      * -1表示永不过期（逻辑上的永不过期，实际上过期为30s, 在过期时间剩余20s时将自动续期到30s）
      */
     long leaseTime() default 30;
+    /**
+     * 自定义异常消息
+     */
+    String exceptionMessage() default "";
 }
 ```
