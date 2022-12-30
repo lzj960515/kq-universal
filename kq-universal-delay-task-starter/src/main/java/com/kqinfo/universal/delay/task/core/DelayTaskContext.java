@@ -4,8 +4,11 @@ import com.kqinfo.universal.delay.task.annotation.DelayTask;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.core.env.Environment;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 1.0.0
  */
 @Component
-public class DelayTaskContext implements ApplicationListener<ApplicationReadyEvent> {
+public class DelayTaskContext implements ApplicationListener<ApplicationReadyEvent>, EnvironmentAware {
 
     /**
      * 执行器map, 任务名称:执行器
@@ -46,12 +49,26 @@ public class DelayTaskContext implements ApplicationListener<ApplicationReadyEve
                 if(delayTask == null){
                     return;
                 }
-                INVOKER_REPOSITORY.put(delayTask.name(), new DelayTaskMethod(bean, method));
+                INVOKER_REPOSITORY.put(this.getTaskName(delayTask.name()), new DelayTaskMethod(bean, method));
             });
         }
     }
 
     public static DelayTaskMethod find(String taskName){
         return INVOKER_REPOSITORY.get(taskName);
+    }
+
+    private Environment environment;
+
+    @Override
+    public void setEnvironment(@NonNull Environment environment) {
+        this.environment = environment;
+    }
+
+    private String getTaskName(String taskName){
+        if(taskName.startsWith("${") && taskName.endsWith("}")){
+            return environment.getRequiredProperty(taskName.substring(2, taskName.length() - 1));
+        }
+        return taskName;
     }
 }

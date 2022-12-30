@@ -80,7 +80,7 @@ public class DelayTaskTemplate {
     private void setStatus(DelayTaskInfo delayTaskInfo, boolean innerFiveSecond){
         // 判断任务执行时间
         if(innerFiveSecond){
-            delayTaskInfo.setExecuteStatus(ExecuteStatus.EXECUTE.status());
+            delayTaskInfo.setExecuteStatus(ExecuteStatus.IN_RING.status());
         }
         else {
             delayTaskInfo.setExecuteStatus(ExecuteStatus.NEW.status());

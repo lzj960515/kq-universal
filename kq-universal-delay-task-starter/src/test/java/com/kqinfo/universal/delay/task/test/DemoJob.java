@@ -21,7 +21,7 @@ public class DemoJob {
 
     private static final Logger log = LoggerFactory.getLogger(DemoJob.class);
 
-    @DelayTask(name = "demoJob")
+    @DelayTask(name = "${testTaskName}")
     public void job(String info) {
         log.info("延迟任务「job」被调用了, id:{} 当前时间：{}", info, LocalDateTime.now());
         DelayTaskHelper.handleSuccess();

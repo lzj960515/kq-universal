@@ -12,7 +12,9 @@ public enum  ExecuteStatus {
 
     SUCCESS(3),
 
-    FAIL(4);
+    FAIL(4),
+
+    IN_RING(5);
 
     private final Integer status;
 

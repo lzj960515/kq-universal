@@ -9,3 +9,5 @@ kq:
   delay-task:
     task-retention-days: 30
     concurrency: 200
+
+testTaskName: demoJob

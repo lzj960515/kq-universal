@@ -35,8 +35,9 @@ public final class DelayTaskInvoker implements Runnable {
 
     private void invoke() {
         DelayTaskInfo delayTaskInfo = delayTaskDao.findById(taskId);
-        // 判断任务状态
-        if(!ExecuteStatus.NEW.status().equals(delayTaskInfo.getExecuteStatus())){
+        // 判断任务状态 只有初始化或者在时间轮中的状态才执行
+        if(!ExecuteStatus.NEW.status().equals(delayTaskInfo.getExecuteStatus()) &&
+                !ExecuteStatus.IN_RING.status().equals(delayTaskInfo.getExecuteStatus())){
             return;
         }
         // 1.修改任务状态为执行中
