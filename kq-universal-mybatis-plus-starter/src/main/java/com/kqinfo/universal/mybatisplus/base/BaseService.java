@@ -53,4 +53,11 @@ public interface BaseService<T extends BaseDomain> extends IService<T> {
      */
     IPage<T> page(int current, int size, T domain);
 
+    /**
+     * 修改状态
+     * @param id {@code Long} ID
+     * @return {@code boolean}
+     */
+    boolean updateState(Long id);
+
 }

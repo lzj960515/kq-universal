@@ -1,6 +1,7 @@
 package com.kqinfo.universal.mybatisplus.base;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -50,6 +51,14 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseDom
     @Override
     public IPage<T> page(int current, int size, T domain) {
         return super.page(new Page<>(current, size), Wrappers.lambdaQuery(domain));
+    }
+
+    @Override
+    public boolean updateState(Long id) {
+        UpdateWrapper<T> wrapper = new UpdateWrapper<>();
+        wrapper.setSql("state = 1 - state")
+            .eq(ID, id);
+        return super.update(wrapper);
     }
 
     /**
