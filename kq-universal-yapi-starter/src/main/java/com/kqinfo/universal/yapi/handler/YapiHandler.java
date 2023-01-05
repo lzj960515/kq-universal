@@ -118,10 +118,12 @@ public class YapiHandler extends YapiTemplate {
         if(!override){
             // 不覆盖则判断是否已存在接口，存在直接返回
             List<ApiBaseInfo> apiBaseInfoList = listCatApi(apiInfo.getCatid());
-            for (ApiBaseInfo apiBaseInfo : apiBaseInfoList) {
-                if (apiBaseInfo.getPath().equals(apiInfo.getPath())
-                 && apiBaseInfo.getMethod().equalsIgnoreCase(apiInfo.getMethod())){
-                    return;
+            if(apiBaseInfoList != null){
+                for (ApiBaseInfo apiBaseInfo : apiBaseInfoList) {
+                    if (apiBaseInfo.getPath().equals(apiInfo.getPath())
+                            && apiBaseInfo.getMethod().equalsIgnoreCase(apiInfo.getMethod())){
+                        return;
+                    }
                 }
             }
         }
