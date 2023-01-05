@@ -53,6 +53,10 @@ public class Json5Object {
      * }
      */
     public void put(String key, String value, String desc) {
+        // 如果是个数组，则mock10个
+        if(value.startsWith("[")){
+            key = key + "|10";
+        }
         // 1.判断深度
         this.data.append(blankStr()).append(wrapQuotes(key)).append(':');
         // 如果是个对象
