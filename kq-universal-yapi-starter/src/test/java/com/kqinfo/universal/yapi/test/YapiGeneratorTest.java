@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
  */
 public class YapiGeneratorTest {
 
-    private final String token = "c15e8367ee45714662d72826a09019faed3dd121ebe8f2772dcdf3ee4212140c";
+    private final String token = "cef29ec085e7135dcd57e3e5764596784979b174010e86b7e33a746f2465a29e";
 
 
     @Test

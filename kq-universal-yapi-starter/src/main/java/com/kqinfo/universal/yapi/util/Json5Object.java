@@ -57,6 +57,9 @@ public class Json5Object {
         if(value.startsWith("[")){
             key = key + "|10";
         }
+        if(value.startsWith("[@")){
+            value = "[\"" + value.substring(1, value.length()-1)  + "\"]";
+        }
         // 1.判断深度
         this.data.append(blankStr()).append(wrapQuotes(key)).append(':');
         // 如果是个对象

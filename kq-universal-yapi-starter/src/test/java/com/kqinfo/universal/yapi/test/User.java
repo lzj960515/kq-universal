@@ -35,4 +35,7 @@ public class User extends BaseDomain {
 
     @YapiParameter(value = "array")
     private JSONArray jsonArray;
+
+    @YapiParameter(value = "用户id")
+    private List<String> userIds;
 }
