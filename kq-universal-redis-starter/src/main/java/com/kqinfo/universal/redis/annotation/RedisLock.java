@@ -56,10 +56,9 @@ public @interface RedisLock {
     long waitTime() default 30;
 
     /**
-     * 锁的过期时间(秒)，默认30s过期
      * -1表示永不过期（逻辑上的永不过期，实际上过期为30s, 在过期时间剩余20s时将自动续期到30s）
      */
-    long leaseTime() default 30;
+    long leaseTime() default -1;
 
     /**
      * 自定义异常消息
