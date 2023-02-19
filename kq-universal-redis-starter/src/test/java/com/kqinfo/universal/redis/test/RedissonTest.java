@@ -153,4 +153,39 @@ public class RedissonTest {
         System.out.println(bloomFilter.contains("a"));
         System.out.println(bloomFilter.count());
     }
+
+    @Test
+    public void testLeaseTime() throws InterruptedException {
+        String key = "aa";
+        new Thread(() -> {
+            RLock lock = redissonClient.getLock(key);
+            try {
+                System.out.println(lock.tryLock(0, 10, TimeUnit.SECONDS));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        Thread.sleep(5000);
+
+        new Thread(() -> {
+            RLock lock = redissonClient.getLock(key);
+            try {
+                System.out.println(lock.tryLock(0, 10, TimeUnit.SECONDS));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        Thread.sleep(6000);
+
+        new Thread(() -> {
+            RLock lock = redissonClient.getLock(key);
+            try {
+                System.out.println(lock.tryLock(0, 10, TimeUnit.SECONDS));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
 }
