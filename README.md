@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.github.lzj960515</groupId>
         <artifactId>kq-universal-starter-parent</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.5</version>
     </parent>
 ```
 
