@@ -21,8 +21,8 @@
     <url>https://github.com/lzj960515/kq-universal</url>
 
     <properties>
-        <revision>1.1.4</revision>
-        <kq-universal.version>1.1.4</kq-universal.version>
+        <revision>1.1.5</revision>
+        <kq-universal.version>1.1.5</kq-universal.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
