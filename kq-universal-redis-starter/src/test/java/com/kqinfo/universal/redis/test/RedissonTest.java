@@ -1,6 +1,7 @@
 package com.kqinfo.universal.redis.test;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.redisson.api.BatchOptions;
@@ -160,7 +161,7 @@ public class RedissonTest {
         new Thread(() -> {
             RLock lock = redissonClient.getLock(key);
             try {
-                System.out.println(lock.tryLock(0, 10, TimeUnit.SECONDS));
+                Assert.assertTrue(lock.tryLock(0, 10, TimeUnit.SECONDS));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -171,7 +172,7 @@ public class RedissonTest {
         new Thread(() -> {
             RLock lock = redissonClient.getLock(key);
             try {
-                System.out.println(lock.tryLock(0, 10, TimeUnit.SECONDS));
+                Assert.assertFalse(lock.tryLock(0, 10, TimeUnit.SECONDS));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -182,10 +183,24 @@ public class RedissonTest {
         new Thread(() -> {
             RLock lock = redissonClient.getLock(key);
             try {
-                System.out.println(lock.tryLock(0, 10, TimeUnit.SECONDS));
+                Assert.assertTrue(lock.tryLock(0, 10, TimeUnit.SECONDS));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    @Test
+    public void testIsLocked(){
+        String key = "aa";
+        RLock lock = redissonClient.getLock(key);
+        Assert.assertFalse(lock.isLocked());
+        Assert.assertFalse(lock.isHeldByCurrentThread());
+        lock.lock(5L, TimeUnit.SECONDS);
+        Assert.assertTrue(lock.isLocked());
+        Assert.assertTrue(lock.isHeldByCurrentThread());
+        lock.unlock();
+        Assert.assertFalse(lock.isLocked());
+        Assert.assertFalse(lock.isHeldByCurrentThread());
     }
 }
