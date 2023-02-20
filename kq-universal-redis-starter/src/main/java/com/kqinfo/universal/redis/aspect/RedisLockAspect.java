@@ -66,7 +66,7 @@ public class RedisLockAspect {
             }
             return joinPoint.proceed();
         }finally {
-            if (lock.isHeldByCurrentThread()) {
+            if ( lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
         }
