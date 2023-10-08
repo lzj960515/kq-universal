@@ -21,8 +21,8 @@
     <url>https://github.com/lzj960515/kq-universal</url>
 
     <properties>
-        <revision>1.1.5</revision>
-        <kq-universal.version>1.1.5</kq-universal.version>
+        <revision>1.2.0</revision>
+        <kq-universal.version>1.2.0</kq-universal.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -103,6 +103,7 @@
         <module>kq-universal-dynamic-datasource-starter</module>
         <module>kq-universal-excel-starter</module>
         <module>kq-universal-yapi-starter</module>
+        <module>kq-universal-func-starter</module>
     </modules>
 
     <dependencyManagement>
@@ -345,6 +346,11 @@
             <dependency>
                 <groupId>com.github.lzj960515</groupId>
                 <artifactId>kq-universal-yapi-starter</artifactId>
+                <version>${kq-universal.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lzj960515</groupId>
+                <artifactId>kq-universal-func-starter</artifactId>
                 <version>${kq-universal.version}</version>
             </dependency>
         </dependencies>

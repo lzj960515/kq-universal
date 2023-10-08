@@ -20,12 +20,12 @@ import java.util.Objects;
 @Component
 public class DynamicDataSourceDao {
 
-    private static final String INSERT_SQL = "INSERT INTO `dynamic_data_source` (`name`, `driver_class_name`, `jdbc_url`, `username`, `password`, `minimum_idle`, `maximum_pool_size`, `idle_timeout`, `connection_timeout`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String LIST_SQL = "select `id`, `name`, `driver_class_name`, `jdbc_url`, `username`, `password`, `minimum_idle`, `maximum_pool_size`, `idle_timeout`, `connection_timeout` from `dynamic_data_source`";
+    private static final String INSERT_SQL = "INSERT INTO `dynamic_data_source` (`name`, `driver_class_name`, `jdbc_url`, `username`, `password`, `minimum_idle`, `maximum_pool_size`, `idle_timeout`, `connection_timeout`, `connection_test_query`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String LIST_SQL = "select `id`, `name`, `driver_class_name`, `jdbc_url`, `username`, `password`, `minimum_idle`, `maximum_pool_size`, `idle_timeout`, `connection_timeout`, `connection_test_query` from `dynamic_data_source`";
     private static final String DELETE_SQL = "delete from dynamic_data_source where id = ?";
-    private static final String UPDATE_SQL = "update dynamic_data_source set `name` = ?, `driver_class_name` = ?, `jdbc_url` = ?, `username` = ?, `minimum_idle` = ?, `maximum_pool_size` = ?, `idle_timeout` = ?, `connection_timeout` = ? where id = ?";
+    private static final String UPDATE_SQL = "update dynamic_data_source set `name` = ?, `driver_class_name` = ?, `jdbc_url` = ?, `username` = ?, `minimum_idle` = ?, `maximum_pool_size` = ?, `idle_timeout` = ?, `connection_timeout` = ?, `connection_test_query` = ? where id = ?";
     private static final String UPDATE_PASSWORD_SQL = "update dynamic_data_source set `username` = ?, `password` = ? where id = ?";
-    private static final String GET_SQL = "select `id`, `name`, `driver_class_name`, `jdbc_url`, `username`, `password`, `minimum_idle`, `maximum_pool_size`, `idle_timeout`, `connection_timeout` from `dynamic_data_source` where id = ?";
+    private static final String GET_SQL = "select `id`, `name`, `driver_class_name`, `jdbc_url`, `username`, `password`, `minimum_idle`, `maximum_pool_size`, `idle_timeout`, `connection_timeout`, `connection_test_query` from `dynamic_data_source` where id = ?";
     private final RowMapper<DynamicDataSourceInfo> rowMapper = new DynamicDataSourceInfoRowMapper();
     @Resource
     private JdbcTemplate jdbcTemplate;
@@ -43,6 +43,7 @@ public class DynamicDataSourceDao {
             ps.setInt(7, dynamicDataSourceInfo.getMaximumPoolSize());
             ps.setInt(8, dynamicDataSourceInfo.getIdleTimeout());
             ps.setInt(9, dynamicDataSourceInfo.getConnectionTimeout());
+            ps.setString(10, dynamicDataSourceInfo.getConnectionTestQuery());
             return ps;
         }, keyHolder);
         int id = Objects.requireNonNull(keyHolder.getKey()).intValue();
@@ -71,6 +72,7 @@ public class DynamicDataSourceDao {
                 dynamicDataSourceInfo.getMaximumPoolSize(),
                 dynamicDataSourceInfo.getIdleTimeout(),
                 dynamicDataSourceInfo.getConnectionTimeout(),
+                dynamicDataSourceInfo.getConnectionTestQuery(),
                 dynamicDataSourceInfo.getId());
     }
 
@@ -93,7 +95,8 @@ public class DynamicDataSourceDao {
             int maximumPoolSize = rs.getInt("maximum_pool_size");
             int idleTimeout = rs.getInt("idle_timeout");
             int connectionTimeout = rs.getInt("connection_timeout");
-            return new DynamicDataSourceInfo(id, name, driverClassName, jdbcUrl, username, password, minimumIdle, maximumPoolSize, idleTimeout, connectionTimeout);
+            String connectionTestQuery = rs.getString("connection_test_query");
+            return new DynamicDataSourceInfo(id, name, driverClassName, jdbcUrl, username, password, minimumIdle, maximumPoolSize, idleTimeout, connectionTimeout, connectionTestQuery);
         }
     }
 }

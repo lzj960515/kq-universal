@@ -33,6 +33,10 @@ public class SingleDelayTaskTest {
     @Test
     public void testLongTimeDelayTask() throws IOException {
         delayTaskTemplate.save("demoJob2", "1", LocalDateTime.now().plusSeconds(10), "测试任务");
+        delayTaskTemplate.save("demoJob2", "1", LocalDateTime.now().plusSeconds(50), "测试任务");
+        delayTaskTemplate.save("demoJob2", "1", LocalDateTime.now().plusSeconds(100), "测试任务");
+        delayTaskTemplate.save("demoJob2", "1", LocalDateTime.now().plusSeconds(200), "测试任务");
+        delayTaskTemplate.save("demoJob2", "1", LocalDateTime.now().plusSeconds(400), "测试任务");
         System.out.println("保存延时任务，时间："+ LocalDateTime.now());
         System.in.read();
     }

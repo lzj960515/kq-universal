@@ -30,7 +30,11 @@ public final class DelayTaskInvoker implements Runnable {
 
     @Override
     public void run() {
-        this.invoke();
+        try{
+            this.invoke();
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
     }
 
     private void invoke() {

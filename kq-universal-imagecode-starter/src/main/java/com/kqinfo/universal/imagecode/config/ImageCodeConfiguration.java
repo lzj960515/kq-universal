@@ -26,4 +26,5 @@ public class ImageCodeConfiguration {
         return new ImageCodeHandler();
     }
 
+
 }

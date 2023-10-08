@@ -4,7 +4,7 @@ spring:
   application:
     name: delay-task
   profiles:
-    active: h2
+`    active: mysql
 kq:
   delay-task:
     task-retention-days: 30

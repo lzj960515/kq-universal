@@ -46,8 +46,8 @@ public class DataSourceHelper {
         if (StringUtils.hasText(dynamicDataSourceInfo.getDriverClassName())) {
             hikariConfig.setDriverClassName(dynamicDataSourceInfo.getDriverClassName());
         }
-        hikariConfig.setJdbcUrl(dynamicDataSourceInfo.getJdbcUrl());
-        hikariConfig.setUsername(dynamicDataSourceInfo.getUsername());
+        hikariConfig.setJdbcUrl(encryptHandler.decrypt(dynamicDataSourceInfo.getJdbcUrl()));
+        hikariConfig.setUsername(encryptHandler.decrypt(dynamicDataSourceInfo.getUsername()));
         hikariConfig.setPassword(encryptHandler.decrypt(dynamicDataSourceInfo.getPassword()));
         if (hasNumber(dynamicDataSourceInfo.getMinimumIdle())) {
             hikariConfig.setMinimumIdle(dynamicDataSourceInfo.getMinimumIdle());
@@ -62,11 +62,28 @@ public class DataSourceHelper {
         if (hasNumber(dynamicDataSourceInfo.getConnectionTimeout())){
             hikariConfig.setConnectionTimeout(dynamicDataSourceInfo.getConnectionTimeout());
         }
+        if (StringUtils.hasText(dynamicDataSourceInfo.getConnectionTestQuery())) {
+            hikariConfig.setConnectionTestQuery(dynamicDataSourceInfo.getConnectionTestQuery());
+        }
         return new HikariDataSource(hikariConfig);
     }
 
-    public String encryptPassword(String rowPassword) {
-        return encryptHandler.encrypt(rowPassword);
+    /**
+     * 数据统一加密
+     * @param row
+     * @return
+     */
+    public String encryptRow(String row) {
+        return encryptHandler.encrypt(row);
+    }
+
+    /**
+     * 数据统一解密
+     * @param row
+     * @return
+     */
+    public String decryptRow(String row) {
+        return encryptHandler.decrypt(row);
     }
 
     public DataSource checkValid(DynamicDataSourceInfo dynamicDataSourceInfo) {

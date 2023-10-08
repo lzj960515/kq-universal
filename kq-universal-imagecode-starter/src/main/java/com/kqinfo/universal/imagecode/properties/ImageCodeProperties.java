@@ -33,4 +33,9 @@ public class ImageCodeProperties {
      * 验证码过期时间
      */
     private int codeExpireSeconds = 60;
+
+    /**
+     * 验证码基础字符串
+     */
+    private String baseChars = "2345678";
 }

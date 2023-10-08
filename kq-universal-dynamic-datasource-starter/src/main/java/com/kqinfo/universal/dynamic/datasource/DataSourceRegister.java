@@ -22,7 +22,9 @@ public class DataSourceRegister implements InitializingBean {
 
 
     public void putDataSource(DynamicDataSourceInfo dynamicDataSourceInfo){
-        dynamicDataSourceInfo.setPassword(dataSourceHelper.encryptPassword(dynamicDataSourceInfo.getPassword()));
+        dynamicDataSourceInfo.setPassword(dataSourceHelper.encryptRow(dynamicDataSourceInfo.getPassword()));
+        dynamicDataSourceInfo.setUsername(dataSourceHelper.encryptRow(dynamicDataSourceInfo.getUsername()));
+        dynamicDataSourceInfo.setJdbcUrl(dataSourceHelper.encryptRow(dynamicDataSourceInfo.getJdbcUrl()));
         // 检查数据源
         DataSource dataSource = dataSourceHelper.checkValid(dynamicDataSourceInfo);
         dynamicDataSourceDao.save(dynamicDataSourceInfo);
@@ -35,6 +37,8 @@ public class DataSourceRegister implements InitializingBean {
     }
 
     public void updateById(DynamicDataSourceInfo dynamicDataSourceInfo){
+        dynamicDataSourceInfo.setUsername(dataSourceHelper.encryptRow(dynamicDataSourceInfo.getUsername()));
+        dynamicDataSourceInfo.setJdbcUrl(dataSourceHelper.encryptRow(dynamicDataSourceInfo.getJdbcUrl()));
         // 检查数据源
         DataSource dataSource = dataSourceHelper.checkValid(dynamicDataSourceInfo);
         dynamicDataSourceDao.updateById(dynamicDataSourceInfo);
@@ -43,25 +47,41 @@ public class DataSourceRegister implements InitializingBean {
 
     public void updatePassword(String username, String password, Integer id){
         DynamicDataSourceInfo dynamicDataSourceInfo = this.get(id);
-        dynamicDataSourceInfo.setUsername(username);
-        dynamicDataSourceInfo.setPassword(dataSourceHelper.encryptPassword(password));
+        dynamicDataSourceInfo.setJdbcUrl(dataSourceHelper.encryptRow(dynamicDataSourceInfo.getJdbcUrl()));
+        dynamicDataSourceInfo.setUsername(dataSourceHelper.encryptRow(username));
+        dynamicDataSourceInfo.setPassword(dataSourceHelper.encryptRow(password));
         DataSource dataSource = dataSourceHelper.checkValid(dynamicDataSourceInfo);
-        dynamicDataSourceDao.updatePassword(username, dynamicDataSourceInfo.getPassword(), id);
+        dynamicDataSourceDao.updatePassword(dynamicDataSourceInfo.getUsername(), dynamicDataSourceInfo.getPassword(), id);
         dataSourceHelper.putDataSource(id, dataSource);
     }
 
     public List<DynamicDataSourceInfo> list(){
-        return dynamicDataSourceDao.list();
+        List<DynamicDataSourceInfo> dynamicDataSourceInfos = dynamicDataSourceDao.list();
+        dynamicDataSourceInfos.forEach(it -> decryptDataSource(it));
+        return dynamicDataSourceInfos;
     }
 
     public DynamicDataSourceInfo get(Integer id){
-        return dynamicDataSourceDao.getById(id);
+        return decryptDataSource(dynamicDataSourceDao.getById(id));
     }
 
     public void reconnect(Integer id){
-        DynamicDataSourceInfo dynamicDataSourceInfo = this.get(id);
+        DynamicDataSourceInfo dynamicDataSourceInfo = dynamicDataSourceDao.getById(id);
         HikariDataSource dataSource = dataSourceHelper.createDataSource(dynamicDataSourceInfo);
         dataSourceHelper.putDataSource(id, dataSource);
+    }
+
+    /**
+     * 解密链接信息中的加密数据
+     * @param dynamicDataSourceInfo
+     * @return
+     */
+    public DynamicDataSourceInfo decryptDataSource(DynamicDataSourceInfo dynamicDataSourceInfo) {
+        if (dynamicDataSourceInfo != null) {
+            dynamicDataSourceInfo.setUsername(dataSourceHelper.decryptRow(dynamicDataSourceInfo.getUsername()));
+            dynamicDataSourceInfo.setJdbcUrl(dataSourceHelper.decryptRow(dynamicDataSourceInfo.getJdbcUrl()));
+        }
+        return dynamicDataSourceInfo;
     }
 
     @Override

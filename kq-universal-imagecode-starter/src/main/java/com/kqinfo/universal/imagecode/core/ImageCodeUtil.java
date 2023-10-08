@@ -3,6 +3,8 @@ package com.kqinfo.universal.imagecode.core;
 import cn.hutool.core.img.GraphicsUtil;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.RandomUtil;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.google.code.kaptcha.util.Config;
 import com.kqinfo.universal.imagecode.properties.ImageCodeProperties;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Properties;
 
 /**
  * @author Zijian Liao
@@ -35,18 +38,64 @@ public class ImageCodeUtil {
      */
     private static int codeCount;
 
+    private static String baseChars;
+
     private static final String RANDOM_CODE = "ABCDEFGHJKMNPQRSTWXYZ123456789";
+
+    private static final DefaultKaptcha PRODUCER = new DefaultKaptcha();
+    private static final Properties properties = new Properties();
 
     public ImageCodeUtil(ImageCodeProperties imageCodeProperties) {
         ImageCodeUtil.width = imageCodeProperties.getWidth();
         ImageCodeUtil.height = imageCodeProperties.getHeight();
         ImageCodeUtil.codeCount = imageCodeProperties.getCodeCount();
+        ImageCodeUtil.baseChars = imageCodeProperties.getBaseChars();
+        init();
+    }
+    private static void init(){
+        // 无边框
+        properties.setProperty("kaptcha.border", "no");
+        // 验证码图片宽度 默认为200
+        properties.setProperty("kaptcha.image.width", String.valueOf(ImageCodeUtil.width));
+        // 验证码图片高度 默认为50
+        properties.setProperty("kaptcha.image.height", String.valueOf(ImageCodeUtil.height));
+        // 验证码文本字符大小 默认为40
+        int frontSize = (int) (ImageCodeUtil.height * 0.75);
+        properties.setProperty("kaptcha.textproducer.font.size", String.valueOf(frontSize));
+        // 验证码文本字符间距 默认为2
+        properties.setProperty("kaptcha.textproducer.char.space", "5");
+        // 验证码文本字符长度 默认为4
+        properties.setProperty("kaptcha.textproducer.char.length", String.valueOf(ImageCodeUtil.codeCount));
+        properties.setProperty("kaptcha.textproducer.font.names", "Arial,Courier");
+        // abcde2345678gfynmnpwx
+        properties.setProperty("kaptcha.textproducer.char.string", ImageCodeUtil.baseChars);
+        Config config = new Config(properties);
+        PRODUCER.setConfig(config);
+    }
+
+    private static void refresh() {
+        properties.setProperty("kaptcha.textproducer.font.color", getRandomColor());
+        properties.setProperty("kaptcha.noise.color", getRandomColor());
+    }
+
+    private static String getRandomColor(){
+        Color color = ImgUtil.randomColor();
+        return color.getRed() + "," + color.getGreen() + "," + color.getBlue();
     }
 
     public static ImageCode createImage() {
-        final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        refresh();
+        String code = PRODUCER.createText();
+        BufferedImage image = PRODUCER.createImage(code);
+
+        return new ImageCode()
+                .setBufferedImage(image)
+                .setCode(code.toLowerCase());
+    }
+
+    @Deprecated
+    private static void doCreateImage(String code, BufferedImage image) {
         final Graphics2D g = GraphicsUtil.createGraphics(image, Color.WHITE);
-        String code = RandomUtil.randomString(RANDOM_CODE, codeCount);
         Font font = new Font(Font.SANS_SERIF, Font.BOLD, (int) (height * 0.75));
         GraphicsUtil.drawStringColourful(g, code, font, width, height);
         // 扭曲
@@ -61,10 +110,6 @@ public class ImageCodeUtil {
         int y1 = RandomUtil.randomInt(halfHeight) + halfHeight * indexFlag;
         int y2 = RandomUtil.randomInt(halfHeight) + halfHeight * (1 - indexFlag);
         drawInterfere(g, 0, y1, width, y2, 3, ImgUtil.randomColor());
-
-        return new ImageCode()
-                .setBufferedImage(image)
-                .setCode(code.toLowerCase());
     }
 
     public static void sendImage(BufferedImage bufferedImage, OutputStream outputStream) {

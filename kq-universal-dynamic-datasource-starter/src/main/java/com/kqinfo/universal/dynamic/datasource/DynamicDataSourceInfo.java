@@ -59,6 +59,13 @@ public class DynamicDataSourceInfo implements Cloneable {
      */
     private int connectionTimeout;
 
+    /**
+     * 连接测试SQL，默认为空
+     * 例如：SELECT 1 FROM DUAL, SELECT 1
+     * 大部分数据库不需要配置，部分数据库需要按要求配置
+     */
+    private String connectionTestQuery;
+
     @Override
     public DynamicDataSourceInfo clone() {
         try {

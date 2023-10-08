@@ -19,6 +19,7 @@
 ## [动态数据源组件](kq-universal-dynamic-datasource-starter)
 ## [excel组件](kq-universal-excel-starter)
 ## [yapi组件](kq-universal-yapi-starter)
+## [函数引擎组件](kq-universal-func-starter)
 ## 使用方式
 
 使用该组件作为父工程或者单独使用其中的某个组件
@@ -26,7 +27,7 @@
     <parent>
         <groupId>com.github.lzj960515</groupId>
         <artifactId>kq-universal-starter-parent</artifactId>
-        <version>1.1.5</version>
+        <version>1.2.0</version>
     </parent>
 ```
 
