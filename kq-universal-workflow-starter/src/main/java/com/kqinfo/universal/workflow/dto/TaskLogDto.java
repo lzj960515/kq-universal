@@ -21,6 +21,9 @@ public class TaskLogDto implements Serializable {
 
     private static final long serialVersionUID = 1045908086305661714L;
 
+    @ApiModelProperty("id")
+    private Long id;
+
     @ApiModelProperty("审核人id")
     private String operatorId;
 

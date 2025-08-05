@@ -120,4 +120,11 @@ public interface TaskService extends IService<Task> {
      * @param task 当前任务
      */
     void rollbackToPreTask(Task task);
+
+    /**
+     * 回退到指定任务
+     *
+     * @param taskId 指定任务
+     */
+    void rollbackToTask(Long taskId);
 }

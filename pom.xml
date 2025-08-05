@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.5.RELEASE</version>
+        <version>2.3.12.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -21,8 +21,8 @@
     <url>https://github.com/lzj960515/kq-universal</url>
 
     <properties>
-        <revision>1.2.0</revision>
-        <kq-universal.version>1.2.0</kq-universal.version>
+        <revision>1.2.1</revision>
+        <kq-universal.version>1.2.1</kq-universal.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -40,22 +40,20 @@
         <!-- Tools -->
         <mybatis-plus.version>3.4.3.1</mybatis-plus.version>
         <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
-        <hutool.version>5.8.3</hutool.version>
+        <hutool.version>5.8.25</hutool.version>
         <swagger2.version>2.9.2</swagger2.version>
         <alipay-sdk.version>4.13.0.ALL</alipay-sdk.version>
         <xxl-job.version>2.3.0</xxl-job.version>
-        <aliyun-java-sdk-core.version>4.4.6</aliyun-java-sdk-core.version>
         <aliyun-java-sdk-sms.version>3.0.0-rc1</aliyun-java-sdk-sms.version>
         <redisson.version>3.14.1</redisson.version>
-        <powermock.version>2.0.2</powermock.version>
         <poi.version>4.1.2</poi.version>
-        <xerces.version>2.12.0</xerces.version>
         <tea-openapi.version>0.1.0</tea-openapi.version>
         <dysmsapi20170525.version>2.0.4</dysmsapi20170525.version>
         <jjwt.version>0.11.2</jjwt.version>
         <fastjson.version>1.2.83</fastjson.version>
         <mockito.version>4.2.0</mockito.version>
         <easyexcel.version>3.1.0</easyexcel.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
     </properties>
 
     <licenses>
@@ -132,11 +130,6 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-generator</artifactId>
-                <version>${mybatis-plus-generator.version}</version>
-            </dependency>
 
             <!-- HuTool -->
             <dependency>
@@ -157,13 +150,6 @@
                 <version>${swagger2.version}</version>
             </dependency>
 
-            <!-- Skywalking -->
-            <dependency>
-                <groupId>org.apache.skywalking</groupId>
-                <artifactId>apm-toolkit-logback-1.x</artifactId>
-                <version>${skywalking.version}</version>
-            </dependency>
-
             <!-- alipay-sdk -->
             <dependency>
                 <groupId>com.alipay.sdk</groupId>
@@ -174,11 +160,6 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-sms</artifactId>
                 <version>${aliyun-java-sdk-sms.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.aliyun</groupId>
-                <artifactId>aliyun-java-sdk-core</artifactId>
-                <version>${aliyun-java-sdk-core.version}</version>
             </dependency>
 
             <!-- xxl-job -->
@@ -195,29 +176,11 @@
                 <version>${redisson.version}</version>
             </dependency>
 
-            <!-- Powermock -->
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-module-junit4</artifactId>
-                <version>${powermock.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito2</artifactId>
-                <version>${powermock.version}</version>
-            </dependency>
-
             <!-- Excel -->
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>xerces</groupId>
-                <artifactId>xercesImpl</artifactId>
-                <version>${xerces.version}</version>
             </dependency>
 
             <!-- SMS -->
@@ -257,7 +220,11 @@
                 <artifactId>mockito-inline</artifactId>
                 <version>${mockito.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${kaptcha.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.github.lzj960515</groupId>
                 <artifactId>kq-universal-async-starter</artifactId>
@@ -276,11 +243,6 @@
             <dependency>
                 <groupId>com.github.lzj960515</groupId>
                 <artifactId>kq-universal-redis-starter</artifactId>
-                <version>${kq-universal.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.lzj960515</groupId>
-                <artifactId>kq-universal-security-starter</artifactId>
                 <version>${kq-universal.version}</version>
             </dependency>
             <dependency>

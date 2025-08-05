@@ -73,6 +73,18 @@ public interface WorkflowEngine {
     Integer rejectToPreNode(String processDefName, String businessId, String operator, String reason);
 
     /**
+     * 驳回到指定节点
+     *
+     * @param processDefName 流程定义名称
+     * @param businessId     业务id
+     * @param operator       任务受理人
+     * @param reason         原因
+     * @param taskId         任务id
+     * @return 流程状态 1.审核中 2.审核通过 3.驳回
+     */
+    Integer rejectToNode(String processDefName, String businessId, String operator, String reason, Long taskId);
+
+    /**
      * 取消审核
      *
      * @param processDefName 流程定义名称

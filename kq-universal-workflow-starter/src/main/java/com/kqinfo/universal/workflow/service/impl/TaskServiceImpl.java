@@ -237,6 +237,22 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         taskOperatorService.savePreTaskOperator(parentId, preTask.getId());
     }
 
+    @Override
+    public void rollbackToTask(Long taskId) {
+        HistoryTask historyTask = historyTaskService.getById(taskId);
+        Task preTask = new Task();
+        preTask.setName(historyTask.getName());
+        preTask.setParentId(historyTask.getParentId());
+        preTask.setProcessId(historyTask.getProcessId());
+        preTask.setInstanceId(historyTask.getInstanceId());
+        preTask.setTenantId(historyTask.getTenantId());
+        preTask.setBusinessId(historyTask.getBusinessId());
+        preTask.setCallUri(historyTask.getCallUri());
+        super.save(preTask);
+        // 保存任务受理人
+        taskOperatorService.savePreTaskOperator(taskId, preTask.getId());
+    }
+
     private List<ApproveProgressDto> buildResultNodes(List<ApproveProgressDto> sortNodes, List<HistoryTask> historyTasks, Task task) {
         // 先根据历史任务组装审核进度
         final Map<String, HistoryTask> historyTaskMap = historyTasks.stream().collect(Collectors.toMap(HistoryTask::getName, Function.identity()));

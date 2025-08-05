@@ -103,6 +103,15 @@ public class WorkflowInvokerImpl implements WorkflowInvoker {
     }
 
     @Override
+    public Integer rejectToNode(String processDefName, String businessId, String operator, String reason, Long taskId) {
+        Assert.notNull(processDefName, "流程定义不能为空");
+        Assert.notNull(businessId, "业务id不能为空");
+        Assert.notNull(operator, "审核人不能为空");
+        Assert.notNull(reason, "驳回原因不能为空");
+        return this.executeFunc(operator, () -> workflowEngine.rejectToNode(processDefName, businessId, operator, reason, taskId));
+    }
+
+    @Override
     public List<TodoTaskDto> listTodoTask(String tenantId, String userId, String processDefName) {
         return taskService.listTodoTask(tenantId, userId, processDefName);
     }

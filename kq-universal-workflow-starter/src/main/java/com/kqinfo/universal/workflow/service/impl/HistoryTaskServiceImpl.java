@@ -31,6 +31,7 @@ public class HistoryTaskServiceImpl extends ServiceImpl<HistoryTaskMapper, Histo
                 .orderByDesc(HistoryTask::getCreateTime);
         final List<HistoryTask> list = super.list(wrapper);
         return list.stream().map(task -> new TaskLogDto()
+                .setId(task.getId())
                 .setOperatorId(task.getOperatorId())
                 .setOperator(task.getOperatorName())
                 .setReason(task.getReason())

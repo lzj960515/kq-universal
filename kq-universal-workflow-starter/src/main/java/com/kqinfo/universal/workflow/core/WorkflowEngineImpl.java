@@ -283,6 +283,27 @@ public class WorkflowEngineImpl implements WorkflowEngine, ApplicationListener<A
         return getApproveStatus(task.getInstanceId());
     }
 
+    @Override
+    public Integer rejectToNode(String processName, String businessId, String operator, String reason, Long taskId) {
+        // 将当前任务完成
+        final Task task = taskService.complete(processName, businessId, operator, TaskStatusEnum.REJECT.value(), reason);
+        final Execution execution = getExecution(task, null);
+        // 查找上一个节点
+        Long parentId = task.getParentId();
+        if (parentId == null || parentId == 0) {
+            // 走结束流程
+            processInstanceService.complete(task.getInstanceId(), StatusEnum.REJECT.value());
+        } else {
+            // 将任务回退到指定节点
+            taskService.rollbackToTask(taskId);
+        }
+        // 任务拒绝后执行对应的事件
+        // 取到当前任务的节点
+        final WorkNode node = workflowHandler.getNode(task.getName(), execution.getWorkNodes());
+        workflowListenerExecutor.reject(node.getEvent(), businessId);
+        return getApproveStatus(task.getInstanceId());
+    }
+
     private Integer getApproveStatus(Long processInstanceId) {
         // 查询流程状态
         final HistoryProcessInstance historyProcessInstance = historyProcessInstanceService.getById(processInstanceId);
